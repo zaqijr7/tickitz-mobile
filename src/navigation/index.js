@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 //import screen
 import Login from '../screens/Login';
 import Register from '../screens/Register';
+import Forgot from '../screens/Forgot';
 
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
@@ -12,8 +13,27 @@ function NavigationScreenRoot() {
     <>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen component={Login} name="Login" />
-          <Stack.Screen component={Register} name="Register" />
+          <Stack.Screen
+            component={Register}
+            name="Register"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            component={Login}
+            name="Login"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            component={Forgot}
+            name="Forgot"
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

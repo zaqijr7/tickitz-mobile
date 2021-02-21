@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 //import screen
 import Login from '../screens/Login';
@@ -12,13 +13,24 @@ import Navbar from '../components/Navbar';
 import Order from '../screens/Order';
 import Payment from '../screens/Payment';
 import Ticket from '../screens/Ticket';
+import Profile from '../screens/Profile';
+import OrderHistory from '../screens/OrderHistory';
+import Admin from '../screens/Admin';
 
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
+  const Tab = createMaterialTopTabNavigator();
   return (
     <>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            component={Admin}
+            name="Admin"
+            options={{
+              header: () => <Navbar />,
+            }}
+          />
           <Stack.Screen
             component={Home}
             name="Home"
@@ -71,6 +83,20 @@ function NavigationScreenRoot() {
           <Stack.Screen
             component={Ticket}
             name="Ticket"
+            options={{
+              header: () => <Navbar />,
+            }}
+          />
+          <Stack.Screen
+            component={Profile}
+            name="Profile"
+            options={{
+              header: () => <Navbar />,
+            }}
+          />
+          <Stack.Screen
+            component={OrderHistory}
+            name="OrderHistory"
             options={{
               header: () => <Navbar />,
             }}

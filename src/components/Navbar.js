@@ -4,22 +4,23 @@ import {
   View,
   Image,
   StyleSheet,
-  Touchable,
   TouchableOpacity,
   TextInput,
-  Pressable,
-  ScrollView,
 } from 'react-native';
 import Logo from '../assets/icons/tickitz-1.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 function Navbar({children}) {
   const [bodyHeader, setBodyHeader] = useState(false);
+  const navigation = useNavigation();
   return (
     <>
       <View style={styles.rootWrapper}>
         <View style={styles.navbarHeader}>
-          <Image source={Logo} />
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image source={Logo} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => setBodyHeader(!bodyHeader)}>
             <Icon name="bars" style={styles.iconBar} />
           </TouchableOpacity>
@@ -27,47 +28,35 @@ function Navbar({children}) {
         {bodyHeader && (
           <>
             <View style={styles.navbarBody}>
-              <View>
+              <View style={styles.wrapperNavbarBody}>
                 <View style={styles.wrapperInput}>
                   <Icon name="search" style={styles.iconSearch} />
                   <TextInput style={styles.formInput} placeholder="Search..." />
                 </View>
-                <Pressable
-                  android_ripple={{
-                    color: 'red',
-                    radius: 20,
-                  }}>
-                  <View style={styles.listTextMenu}>
-                    <Text style={styles.textMenu}>Location</Text>
-                  </View>
-                </Pressable>
-                <Pressable
-                  android_ripple={{
-                    color: 'red',
-                    radius: 20,
-                  }}>
+                <TouchableOpacity style={styles.listTextMenu}>
+                  <Text style={styles.textMenu}>Location</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
                   <View style={styles.listTextMenu}>
                     <Text style={styles.textMenu}>Movies</Text>
                   </View>
-                </Pressable>
-                <Pressable
-                  android_ripple={{
-                    color: 'red',
-                    radius: 20,
-                  }}>
+                </TouchableOpacity>
+                <TouchableOpacity>
                   <View style={styles.listTextMenu}>
                     <Text style={styles.textMenu}>Cinemas</Text>
                   </View>
-                </Pressable>
-                <Pressable
-                  android_ripple={{
-                    color: 'red',
-                    radius: 20,
-                  }}>
+                </TouchableOpacity>
+                <TouchableOpacity>
                   <View style={styles.listTextMenu}>
                     <Text style={styles.textMenu}>Buy Ticket</Text>
                   </View>
-                </Pressable>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Profile')}>
+                  <View style={styles.listTextMenu}>
+                    <Text style={styles.textMenu}>Profile</Text>
+                  </View>
+                </TouchableOpacity>
                 <View style={styles.listTextMenu}>
                   <Text style={styles.crTickitz}>
                     © 2020 Tickitz. All Rights Reserved.
@@ -86,26 +75,24 @@ function Navbar({children}) {
 const styles = StyleSheet.create({
   rootWrapper: {
     backgroundColor: 'white',
-    zIndex: 1,
   },
   navbarHeader: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    position: 'relative',
     paddingHorizontal: 24,
   },
   navbarBody: {
-    display: 'flex',
-    flex: 1,
-    position: 'absolute',
-    width: '100%',
-    bottom: -725,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // flex: 1,
+    // position: 'absolute',
+    // width: '100%',
+    // bottom: -725,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  wrapperNavbarBody: {
     backgroundColor: 'white',
-    zIndex: 3,
   },
   iconBar: {
     fontSize: 20,

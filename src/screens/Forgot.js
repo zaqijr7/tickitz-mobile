@@ -16,7 +16,10 @@ function Forgot() {
       <ScrollView style={styles.parentRoot}>
         <Image source={Logo} style={styles.logo} />
         <View>
-          <Text style={styles.titlePage}>Sign In</Text>
+          <Text style={styles.titlePage}>Forgot password</Text>
+          <Text style={styles.text}>
+            we'll send a link to your email shortly
+          </Text>
         </View>
         <View>
           <Text style={styles.labelForm}>Email</Text>
@@ -44,7 +47,11 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginTop: 26,
-    marginBottom: 31,
+    marginBottom: 10,
+  },
+  text: {
+    color: '#8692A6',
+    marginBottom: 30,
   },
   labelForm: {
     fontSize: 16,

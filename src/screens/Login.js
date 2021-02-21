@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ButtonSocialMedia from '../components/ButtonSocialMadiea';
 
 function Login({navigation}) {
+  console.log(navigation, '<<<<< ini naviagasi');
   return (
     <>
       <ScrollView style={styles.parentRoot}>

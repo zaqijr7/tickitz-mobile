@@ -8,6 +8,10 @@ target 'tickitzMobile' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
   target 'tickitzMobileTests' do
     inherit! :complete
     # Pods for testing

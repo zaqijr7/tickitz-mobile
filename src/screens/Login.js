@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Text,
@@ -11,9 +11,20 @@ import {
 import Logo from '../assets/icons/tickitz-1.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ButtonSocialMedia from '../components/ButtonSocialMadiea';
+import {useDispatch, useSelector} from 'react-redux';
+
+//import action
+import {login} from '../redux/action/auth';
 
 function Login({navigation}) {
-  console.log(navigation, '<<<<< ini naviagasi');
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const msg = useSelector((state) => state.auth.message);
+  const handlePress = () => {
+    dispatch(login(email, password));
+  };
+  console.log(msg, '< ini pesannya');
   return (
     <>
       <ScrollView style={styles.parentRoot}>
@@ -22,8 +33,21 @@ function Login({navigation}) {
           <Text style={styles.titlePage}>Sign In</Text>
         </View>
         <View>
+          {msg !== '' ? (
+            <>
+              <View style={styles.alertMessage}>
+                <Text style={{fontWeight: 'bold', color: 'white'}}>{msg}</Text>
+              </View>
+            </>
+          ) : (
+            <Text> </Text>
+          )}
           <Text style={styles.labelForm}>Email</Text>
-          <TextInput placeholder="Write your email" style={styles.formInput} />
+          <TextInput
+            placeholder="Write your email"
+            style={styles.formInput}
+            onChangeText={(text) => setEmail(text)}
+          />
         </View>
         <View style={{marginTop: 15}}>
           <Text style={styles.labelForm}>Password</Text>
@@ -31,11 +55,12 @@ function Login({navigation}) {
             <TextInput
               placeholder="Write your password"
               style={styles.formInput}
+              onChangeText={(text) => setPassword(text)}
             />
             <Icon name="eye" style={styles.eyeIcon} />
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handlePress()}>
           <View style={styles.buttonJoin}>
             <Text style={styles.textButton}>Sign in</Text>
           </View>
@@ -43,7 +68,7 @@ function Login({navigation}) {
         <View style={styles.row}>
           <Text style={styles.textLogin}>
             Forgot Your Password?
-            <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
+            <TouchableOpacity>
               <Text style={styles.loginLink}> Reset Now</Text>
             </TouchableOpacity>
           </Text>
@@ -137,6 +162,15 @@ const styles = StyleSheet.create({
   textOr: {
     marginHorizontal: 10,
     color: '#888',
+  },
+  alertMessage: {
+    height: 48,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ff7063',
+    borderRadius: 10,
+    marginBottom: 20,
   },
 });
 

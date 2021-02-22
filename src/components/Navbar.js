@@ -57,6 +57,11 @@ function Navbar({children}) {
                     <Text style={styles.textMenu}>Profile</Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Admin')}>
+                  <View style={styles.listTextMenu}>
+                    <Text style={styles.textMenu}>Dashboard</Text>
+                  </View>
+                </TouchableOpacity>
                 <View style={styles.listTextMenu}>
                   <Text style={styles.crTickitz}>
                     © 2020 Tickitz. All Rights Reserved.
@@ -87,7 +92,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     // position: 'absolute',
     // width: '100%',
-    // bottom: -725,
+    // bottom: -840,
     // justifyContent: 'center',
     // alignItems: 'center',
   },

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {
   Image,
   Text,
@@ -7,16 +8,46 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
+import {set} from 'react-native-reanimated';
 
 //import Icon
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch} from 'react-redux';
 
 //import logo
 import Logo from '../assets/icons/tickitz-1.png';
 import ButtonSocialMedia from '../components/ButtonSocialMadiea';
+import MessageBar from '../components/MessageBar';
+import http from '../helper/http';
 
-function Register({navigation}) {
+function Register() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [msgResponse, setMsgResponse] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const navigation = useNavigation();
+
+  const handlePress = async () => {
+    setIsLoading(!isLoading);
+    const params = new URLSearchParams();
+    params.append('email', email);
+    params.append('password', password);
+    try {
+      const response = await http().post('auth/register', params);
+      setMsgResponse(response.data.message);
+      setSuccess(response.data.success);
+      setIsLoading(false);
+    } catch (err) {
+      setMsgResponse(err.response.data.message);
+      console.log(err.response.data.message);
+      setSuccess(err.response.data.success);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <ScrollView style={styles.parentRoot}>
@@ -24,25 +55,41 @@ function Register({navigation}) {
         <View>
           <Text style={styles.titlePage}>Sign Up</Text>
         </View>
+        {msgResponse !== null && (
+          <MessageBar success={success} message={msgResponse} />
+        )}
         <View>
           <Text style={styles.labelForm}>Email</Text>
-          <TextInput placeholder="Write your email" style={styles.formInput} />
+          <TextInput
+            onChangeText={(value) => setEmail(value)}
+            placeholder="Write your email"
+            style={styles.formInput}
+          />
         </View>
         <View style={{marginTop: 15}}>
           <Text style={styles.labelForm}>Password</Text>
           <View style={styles.formPassword}>
             <TextInput
+              onChangeText={(value) => setPassword(value)}
               placeholder="Write your password"
               style={styles.formInput}
             />
             <Icon name="eye" style={styles.eyeIcon} />
           </View>
         </View>
-        <TouchableOpacity>
-          <View style={styles.buttonJoin}>
-            <Text style={styles.textButton}>Join for free</Text>
-          </View>
-        </TouchableOpacity>
+        {isLoading === true ? (
+          <TouchableOpacity>
+            <View style={styles.buttonJoin}>
+              <ActivityIndicator size="small" color="#fff" />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={handlePress}>
+            <View style={styles.buttonJoin}>
+              <Text style={styles.textButton}>Join for free</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <View style={styles.row}>
           <Text style={styles.textLogin}>
             Do you already have an account?

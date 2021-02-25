@@ -1,15 +1,21 @@
+import http from '../../helper/http';
+
 export const login = (email, password) => {
   console.log(email, '<<< ini email');
   return async (dispatch) => {
-    if (email === 'zaqijr7@gmail.com' && password === '1234') {
+    const params = new URLSearchParams();
+    params.append('email', email);
+    params.append('password', password);
+    try {
+      const response = await http().post('auth/login', params);
       dispatch({
         type: 'LOGIN',
-        payload: 'stringRandom',
+        payload: response.data.results.token,
       });
-    } else {
+    } catch (err) {
       dispatch({
         type: 'LOGIN_MESSAGE',
-        msg: 'Email or password is wrong',
+        payload: err.response.data.message,
       });
     }
   };

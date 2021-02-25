@@ -15,12 +15,14 @@ import {useDispatch, useSelector} from 'react-redux';
 
 //import action
 import {login} from '../redux/action/auth';
+import {useNavigation} from '@react-navigation/native';
 
-function Login({navigation}) {
+function Login() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const msg = useSelector((state) => state.auth.message);
+  const navigation = useNavigation();
   const handlePress = () => {
     dispatch(login(email, password));
   };
@@ -33,14 +35,12 @@ function Login({navigation}) {
           <Text style={styles.titlePage}>Sign In</Text>
         </View>
         <View>
-          {msg !== '' ? (
+          {msg !== '' && (
             <>
               <View style={styles.alertMessage}>
                 <Text style={{fontWeight: 'bold', color: 'white'}}>{msg}</Text>
               </View>
             </>
-          ) : (
-            <Text> </Text>
           )}
           <Text style={styles.labelForm}>Email</Text>
           <TextInput
@@ -68,7 +68,7 @@ function Login({navigation}) {
         <View style={styles.row}>
           <Text style={styles.textLogin}>
             Forgot Your Password?
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Forgot')}>
               <Text style={styles.loginLink}> Reset Now</Text>
             </TouchableOpacity>
           </Text>

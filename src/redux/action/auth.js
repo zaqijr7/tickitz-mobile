@@ -1,4 +1,5 @@
 import http from '../../helper/http';
+import jwt_decode from 'jwt-decode';
 
 export const login = (email, password) => {
   console.log(email, '<<< ini email');
@@ -12,10 +13,19 @@ export const login = (email, password) => {
         type: 'LOGIN',
         payload: response.data.results.token,
       });
+      const {id} = jwt_decode(response.data.results.token);
+      const profile = await http(response.data.results.token).get(
+        `profile?id=${id}`,
+      );
+      dispatch({
+        type: 'PROFILE',
+        payload: profile.data.results,
+      });
     } catch (err) {
+      console.log(err.response.data.message);
       dispatch({
         type: 'LOGIN_MESSAGE',
-        payload: err.response.data.message,
+        msg: err.response.data.message,
       });
     }
   };

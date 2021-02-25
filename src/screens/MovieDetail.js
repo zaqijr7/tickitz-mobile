@@ -6,24 +6,29 @@ import CardSchedule from '../components/CardSchedule';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Footer from '../components/Footer';
 import ButtonLocation from '../components/ButtonLocation';
+import {useSelector} from 'react-redux';
 
 function MovieDetail() {
+  const movieSelected = useSelector((state) => state.transaction.movie);
   return (
     <>
       <ScrollView style={styles.viewsParentRootFalse}>
         <View style={styles.rowThumbnailMovie}>
           <View style={styles.frameThumbnail}>
-            <Image source={wonderWoman} style={styles.pictThumbnail} />
+            <Image
+              source={{uri: movieSelected.poster}}
+              style={styles.pictThumbnail}
+            />
           </View>
         </View>
         <View>
-          <Text style={styles.titleMovie}>Wonder Women 1984</Text>
-          <Text style={styles.textGenre}>Action, Sci-Fi, Adventure</Text>
+          <Text style={styles.titleMovie}>{movieSelected.title}</Text>
+          <Text style={styles.textGenre}>{movieSelected.genre}</Text>
         </View>
         <View style={styles.row1}>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Release Date</Text>
-            <Text>June 28, 2017</Text>
+            <Text>{movieSelected.relaseDate}</Text>
           </View>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Directed By</Text>

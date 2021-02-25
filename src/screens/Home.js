@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,8 +22,21 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import ButtonMonth from '../components/ButtonMonth';
 import UpcomingCard from '../components/UpcomingCard';
 import Footer from '../components/Footer';
+import {useEffect, useState} from 'react/cjs/react.development';
+import http from '../helper/http';
 
 function Home({navigation}) {
+  const [nowShow, setNowShow] = useState([]);
+
+  const getNowShow = async () => {
+    const response = await http().get('nowshow');
+    setNowShow(response.data.results);
+  };
+
+  useEffect(() => {
+    getNowShow();
+  }, []);
+  console.log(nowShow);
   return (
     <>
       <ScrollView style={styles.viewsParentRootFalse}>
@@ -39,24 +53,18 @@ function Home({navigation}) {
             </TouchableOpacity>
           </View>
           <View>
-            <ScrollView horizontal={true}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('MovieDetail')}>
-                <NowShowingCard image={movie1} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('MovieDetail')}>
-                <NowShowingCard image={movie2} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('MovieDetail')}>
-                <NowShowingCard image={movie3} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('MovieDetail')}>
-                <NowShowingCard image={movie4} />
-              </TouchableOpacity>
-            </ScrollView>
+            <FlatList
+              data={nowShow}
+              keyExtractor={(item, index) => String(item.id)}
+              renderItem={({item}) => (
+                <NowShowingCard
+                  poster={item.poster}
+                  title={item.title}
+                  id={item.id}
+                />
+              )}
+              horizontal={true}
+            />
           </View>
         </View>
         <View>

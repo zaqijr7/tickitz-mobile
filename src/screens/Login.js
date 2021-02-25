@@ -7,6 +7,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Logo from '../assets/icons/tickitz-1.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,10 +22,15 @@ function Login() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const msg = useSelector((state) => state.auth.message);
   const navigation = useNavigation();
   const handlePress = () => {
-    dispatch(login(email, password));
+    setIsLoading(!isLoading);
+    setTimeout(() => {
+      dispatch(login(email, password));
+      setIsLoading(false);
+    }, 3000);
   };
   console.log(msg, '< ini pesannya');
   return (
@@ -47,6 +53,7 @@ function Login() {
             placeholder="Write your email"
             style={styles.formInput}
             onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
           />
         </View>
         <View style={{marginTop: 15}}>
@@ -60,11 +67,17 @@ function Login() {
             <Icon name="eye" style={styles.eyeIcon} />
           </View>
         </View>
-        <TouchableOpacity onPress={() => handlePress()}>
+        {isLoading === true ? (
           <View style={styles.buttonJoin}>
-            <Text style={styles.textButton}>Sign in</Text>
+            <ActivityIndicator size="small" color="#fff" />
           </View>
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => handlePress()}>
+            <View style={styles.buttonJoin}>
+              <Text style={styles.textButton}>Sign in</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <View style={styles.row}>
           <Text style={styles.textLogin}>
             Forgot Your Password?

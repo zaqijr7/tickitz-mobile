@@ -1,12 +1,15 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
-import {useState} from 'react/cjs/react.development';
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch, useSelector} from 'react-redux';
+import {inputCity} from '../redux/action/findSchedule';
 
 function ButtonLocation() {
-  const [city, setCity] = useState('City');
-  console.log(city);
+  const dispatch = useDispatch();
+  const listCity = useSelector((state) => state.findSchedule.listCity);
+  const city = useSelector((state) => state.findSchedule.city);
+
   return (
     <View style={style.parentFrame}>
       <View style={style.btnWrapper}>
@@ -14,10 +17,17 @@ function ButtonLocation() {
         <Picker
           selectedValue={city}
           style={style.btnLocation}
-          onValueChange={(itemValue, itemIndex) => setCity(itemValue)}>
+          onValueChange={(itemValue, itemIndex) =>
+            dispatch(inputCity(itemValue))
+          }>
           <Picker.Item label="Choose Location" value="Choose Location" />
-          <Picker.Item label="Jakarta" value="Jakarta" />
-          <Picker.Item label="Bandung" value="Bandung" />
+          {listCity.length !== 0 ? (
+            listCity.map((item, index) => {
+              return <Picker.Item label={item} value={item} />;
+            })
+          ) : (
+            <ActivityIndicator />
+          )}
         </Picker>
         <Icon name="chevron-down" style={style.dropdownIcon} />
       </View>

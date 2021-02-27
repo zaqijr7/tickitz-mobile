@@ -9,16 +9,23 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import moment from 'moment';
+import {useDispatch} from 'react-redux';
+import {inputDate} from '../redux/action/findSchedule';
 
 function ButtonDate() {
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
+  const [displayDate, setDisplayDate] = useState(null);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
+    dispatch(inputDate(moment(currentDate).format('YYYY-MM-DD')));
     setDate(currentDate);
+    setDisplayDate(selectedDate);
   };
 
   const showMode = (currentMode) => {
@@ -30,14 +37,16 @@ function ButtonDate() {
     showMode('date');
   };
 
-  console.log(date);
-
   return (
     <View style={style.parentFrame}>
       <TouchableOpacity onPress={showDatepicker}>
         <View style={style.buttonDate}>
           <Icon name="calendar" style={style.iconCalendar} />
-          <Text style={style.buttonTitle}>Set a date</Text>
+          <Text style={style.buttonTitle}>
+            {displayDate === null
+              ? 'Set a Date'
+              : moment(displayDate).format('LL')}
+          </Text>
           <Icon name="chevron-down" style={style.dropdownIcon} />
         </View>
       </TouchableOpacity>

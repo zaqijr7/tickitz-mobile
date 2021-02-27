@@ -1,53 +1,49 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useState} from 'react';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {useDispatch} from 'react-redux';
 import ebv from '../assets/icons/ebv.png';
 
-function CardSchedule() {
+function CardSchedule(props) {
   const navigation = useNavigation();
+  const [cinemaSelect, setCinemaSelect] = useState('');
+  const [time, setTime] = useState('');
+  const dispatch = useDispatch();
+  const handlePress = (idCinema) => {
+    dispatch()
+  };
   return (
     <>
       <View style={styles.parentWrapper}>
-        <View style={styles.parentCard}>
+        <Pressable style={styles.parentCard}>
           <View style={styles.headCard}>
-            <Image source={ebv} />
-            <Text style={styles.textLocation}>
-              Whatever street No.12, South Purwokerto
-            </Text>
+            <Image source={{uri: `${props.logo}`}} style={styles.imageLogo} />
+            <Text style={styles.textLocation}>{props.address}</Text>
           </View>
           <View style={styles.line} />
           <View style={styles.rowTime}>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.textTime}>08:30am</Text>
-            </TouchableOpacity>
+            {props.listShowTime.map((items, index) => {
+              return (
+                <TouchableOpacity onPress={() => setTime(items[0].id)}>
+                  <Text style={styles.textTime}>{items[0].name}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
           <View style={styles.rowPrice}>
             <Text style={styles.textPrice}>Price</Text>
-            <Text style={styles.textPriceSeat}>$10.00/seat</Text>
+            <Text style={styles.textPriceSeat}>${`${props.price}`}/seat</Text>
           </View>
           <View style={styles.rowBtn}>
-            <TouchableOpacity onPress={() => navigation.navigate('Order')}>
+            <TouchableOpacity onPress={() => handlePress(props.idCinema)}>
               <View style={styles.btnBookNow}>
                 <Text style={styles.titleBtn1}>Book Now</Text>
               </View>
@@ -58,7 +54,7 @@ function CardSchedule() {
               </View>
             </TouchableOpacity>
           </View>
-        </View>
+        </Pressable>
       </View>
     </>
   );
@@ -98,11 +94,12 @@ const styles = StyleSheet.create({
   rowTime: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    marginTop: 20,
+    // justifyContent: 'space-between',
   },
   textTime: {
     marginHorizontal: 5,
-    marginVertical: 20,
+    marginVertical: 15,
   },
   rowPrice: {
     flexDirection: 'row',
@@ -144,6 +141,10 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imageLogo: {
+    width: 120,
+    height: 37.5,
   },
 });
 

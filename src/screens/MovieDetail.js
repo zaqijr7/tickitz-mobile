@@ -1,15 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import wonderWoman from '../assets/images/movie/1.jpg';
+import moment from 'moment';
 import ButtonDate from '../components/ButtonDate';
 import CardSchedule from '../components/CardSchedule';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Footer from '../components/Footer';
 import ButtonLocation from '../components/ButtonLocation';
 import {useSelector} from 'react-redux';
+import {useEffect} from 'react/cjs/react.development';
+import http from '../helper/http';
 
 function MovieDetail() {
+  const [listSchedule, setListSchedule] = useState(null);
+  const [msgRes, setMsgRes] = useState('');
   const movieSelected = useSelector((state) => state.transaction.movie);
+  const date = useSelector((state) => state.findSchedule.date);
+  const city = useSelector((state) => state.findSchedule.city);
+  const idMovie = useSelector((state) => state.transaction.movie.id);
+  const moviePrice = useSelector((state) => state.transaction.movie.price);
+
+  const getListSchedule = async () => {
+    try {
+      const params = new URLSearchParams();
+      params.append('movie', idMovie);
+      params.append('city', city);
+      params.append('showDate', date);
+      const response = await http().post('schedule', params);
+      setListSchedule(response.data.results);
+    } catch (err) {
+      setListSchedule(null);
+      setMsgRes(err.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    getListSchedule();
+  }, [city, date]);
+
   return (
     <>
       <ScrollView style={styles.viewsParentRootFalse}>
@@ -28,43 +55,49 @@ function MovieDetail() {
         <View style={styles.row1}>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Release Date</Text>
-            <Text>{movieSelected.relaseDate}</Text>
+            <Text>{moment(movieSelected.relaseDate).format('LL')}</Text>
           </View>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Directed By</Text>
-            <Text>Jon Watss</Text>
+            <Text>{movieSelected.director}</Text>
           </View>
         </View>
         <View style={styles.row1}>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Duration</Text>
-            <Text>2 hrs 13 min</Text>
+            <Text>{movieSelected.runtime} Minute</Text>
           </View>
           <View style={styles.cardInfo}>
             <Text style={styles.titleCard}>Casts</Text>
-            <Text>Tom Holland, Robert Downey Jr., etc.</Text>
+            <Text>{movieSelected.actors} etc.</Text>
           </View>
         </View>
         <View style={styles.line} />
         <View style={styles.synopisBody}>
           <Text style={styles.textSynopsis}>Synopsis</Text>
-          <Text style={styles.paragraphSynopsis}>
-            Thrilled by his experience with the Avengers, Peter returns home,
-            where he lives with his Aunt May, under the watchful eye of his new
-            mentor Tony Stark, Peter tries to fall back into his normal daily
-            routine - distracted by thoughts of proving himself to be more than
-            just your friendly neighborhood Spider-Man - but when the Vulture
-            emerges as a new villain, everything that Peter holds most important
-            will be threatened.{' '}
-          </Text>
+          <Text style={styles.paragraphSynopsis}>{movieSelected.synopsis}</Text>
         </View>
         <View>
           <Text style={styles.textShowtimes}>Showtimes and Tickets</Text>
         </View>
         <ButtonDate />
         <ButtonLocation />
-        <CardSchedule />
-        <CardSchedule />
+        {listSchedule !== null ? (
+          listSchedule.map((item, index) => {
+            return (
+              <CardSchedule
+                idCinema={item.id_cinema}
+                cinema={item.name}
+                address={item.address}
+                logo={item.logo}
+                listShowTime={item.listShowTime}
+                price={moviePrice}
+              />
+            );
+          })
+        ) : (
+          <Text style={styles.textCenter}>Please choose date and location</Text>
+        )}
         <View style={styles.rowPagination}>
           <TouchableOpacity>
             <View style={styles.btnPaginationActive}>
@@ -203,6 +236,9 @@ const styles = StyleSheet.create({
   },
   numberPagination: {
     color: 'black',
+  },
+  textCenter: {
+    textAlign: 'center',
   },
 });
 

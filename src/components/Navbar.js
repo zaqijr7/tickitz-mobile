@@ -10,10 +10,17 @@ import {
 import Logo from '../assets/icons/tickitz-1.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {destoryToken} from '../redux/action/auth';
 
 function Navbar({children}) {
   const [bodyHeader, setBodyHeader] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const photoProfile = useSelector((state) => state.auth.profile.photo);
+  const logOut = () => {
+    dispatch(destoryToken());
+  };
   return (
     <>
       <View style={styles.rootWrapper}>
@@ -22,7 +29,11 @@ function Navbar({children}) {
             <Image source={Logo} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setBodyHeader(!bodyHeader)}>
-            <Icon name="bars" style={styles.iconBar} />
+            {photoProfile !== 'UNDEFINED' ? (
+              <Image source={{uri: photoProfile}} style={styles.photoProfile} />
+            ) : (
+              <Icon name="bars" style={styles.iconBar} />
+            )}
           </TouchableOpacity>
         </View>
         {bodyHeader && (
@@ -33,22 +44,9 @@ function Navbar({children}) {
                   <Icon name="search" style={styles.iconSearch} />
                   <TextInput style={styles.formInput} placeholder="Search..." />
                 </View>
-                <TouchableOpacity style={styles.listTextMenu}>
-                  <Text style={styles.textMenu}>Location</Text>
-                </TouchableOpacity>
                 <TouchableOpacity>
                   <View style={styles.listTextMenu}>
                     <Text style={styles.textMenu}>Movies</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <View style={styles.listTextMenu}>
-                    <Text style={styles.textMenu}>Cinemas</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <View style={styles.listTextMenu}>
-                    <Text style={styles.textMenu}>Buy Ticket</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -60,6 +58,11 @@ function Navbar({children}) {
                 <TouchableOpacity onPress={() => navigation.navigate('Admin')}>
                   <View style={styles.listTextMenu}>
                     <Text style={styles.textMenu}>Dashboard</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => logOut()}>
+                  <View style={styles.listTextMenu}>
+                    <Text style={styles.textMenu}>Logout</Text>
                   </View>
                 </TouchableOpacity>
                 <View style={styles.listTextMenu}>
@@ -87,6 +90,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 24,
+  },
+  photoProfile: {
+    height: 40,
+    width: 40,
+    borderRadius: 100,
+    resizeMode: 'cover',
+    borderWidth: 1,
   },
   navbarBody: {
     // flex: 1,

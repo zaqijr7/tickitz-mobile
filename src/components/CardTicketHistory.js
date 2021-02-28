@@ -1,19 +1,22 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import moment from 'moment';
 
 import ebv from '../assets/icons/ebv.png';
 
-function CardTicketHistory() {
+function CardTicketHistory(props) {
+  console.log(props.time, '<ini logo');
   return (
     <View style={styles.cardTicket}>
       <View style={styles.rowHeadTicket}>
-        <Image source={ebv} />
+        <Image source={{uri: props.logo}} style={styles.imageLogo} />
         <Text style={{fontSize: 13, color: '#AAAAAA', marginTop: 15}}>
-          Tuesday, 07 July 2020 - 04:30pm
+          {`${moment(props.date).format('dddd')}, ${moment(props.date).format(
+            'LL',
+          )} - ${props.time}`}
         </Text>
         <Text style={{fontSize: 18, fontWeight: 'bold', marginTop: 8}}>
-          {' '}
-          Spider-Man: Homecoming
+          {props.movie}
         </Text>
       </View>
       <View style={styles.line} />
@@ -54,6 +57,10 @@ const styles = StyleSheet.create({
   rowBtn: {
     alignItems: 'center',
     marginVertical: 20,
+  },
+  imageLogo: {
+    height: 38,
+    width: 120,
   },
 });
 

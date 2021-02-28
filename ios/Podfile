@@ -12,6 +12,8 @@ target 'tickitzMobile' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'tickitzMobileTests' do
     inherit! :complete
     # Pods for testing

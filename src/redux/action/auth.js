@@ -30,3 +30,31 @@ export const login = (email, password) => {
     }
   };
 };
+
+export const updatePhoto = (token, id) => {
+  return async (dispatch) => {
+    const profile = await http(token).get(`profile?id=${id}`);
+    dispatch({
+      type: 'PROFILE',
+      payload: profile.data.results,
+    });
+  };
+};
+
+export const updateProfileUser = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'PROFILE',
+      payload: data,
+    });
+  };
+};
+
+export const destoryToken = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'LOGOUT',
+      payload: null,
+    });
+  };
+};

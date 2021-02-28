@@ -13,23 +13,53 @@ import http from '../helper/http';
 function MovieDetail() {
   const [listSchedule, setListSchedule] = useState(null);
   const [msgRes, setMsgRes] = useState('');
+  const [pageInfo, setPageInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const movieSelected = useSelector((state) => state.transaction.movie);
   const date = useSelector((state) => state.findSchedule.date);
   const city = useSelector((state) => state.findSchedule.city);
   const idMovie = useSelector((state) => state.transaction.movie.id);
   const moviePrice = useSelector((state) => state.transaction.movie.price);
+  const limit = 1;
 
   const getListSchedule = async () => {
+    setIsLoading(true);
     try {
       const params = new URLSearchParams();
       params.append('movie', idMovie);
       params.append('city', city);
       params.append('showDate', date);
-      const response = await http().post('schedule', params);
+      const response = await http().post(`schedule?limit=${limit}`, params);
       setListSchedule(response.data.results);
+      setPageInfo(response.data.pageInfo);
+      setIsLoading(false);
     } catch (err) {
       setListSchedule(null);
       setMsgRes(err.response.data.message);
+      setPageInfo(null);
+      setIsLoading(false);
+    }
+  };
+
+  const getDataNextPage = async (page) => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.append('movie', idMovie);
+      params.append('city', city);
+      params.append('showDate', date);
+      const response = await http().post(
+        `schedule?limit=${limit}&page=${page}`,
+        params,
+      );
+      setListSchedule(response.data.results);
+      setPageInfo(response.data.pageInfo);
+      setIsLoading(false);
+    } catch (err) {
+      setListSchedule(null);
+      setMsgRes(err.response.data.message);
+      setPageInfo(null);
+      setIsLoading(false);
     }
   };
 
@@ -99,26 +129,37 @@ function MovieDetail() {
           <Text style={styles.textCenter}>Please choose date and location</Text>
         )}
         <View style={styles.rowPagination}>
-          <TouchableOpacity>
-            <View style={styles.btnPaginationActive}>
-              <Text style={styles.numberPaginationActive}>1</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.btnPagination}>
-              <Text style={styles.numberPagination}>2</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.btnPagination}>
-              <Text style={styles.numberPagination}>3</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.btnPagination}>
-              <Text style={styles.numberPagination}>4</Text>
-            </View>
-          </TouchableOpacity>
+          {pageInfo !== null ? (
+            [...Array(pageInfo.totalPage)].map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => getDataNextPage(index + 1)}
+                  key={String(index)}>
+                  <View
+                    style={
+                      pageInfo.currentPage === index + 1
+                        ? styles.btnPaginationActive
+                        : styles.btnPagination
+                    }>
+                    <Text
+                      style={
+                        pageInfo.currentPage === index + 1
+                          ? styles.numberPaginationActive
+                          : styles.numberPagination
+                      }>
+                      {index + 1}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })
+          ) : (
+            <TouchableOpacity>
+              <View style={styles.btnPaginationActive}>
+                <Text style={styles.numberPaginationActive}>1</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
         <Footer />
       </ScrollView>

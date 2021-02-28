@@ -12,11 +12,15 @@ import {Picker} from '@react-native-picker/picker';
 import {useState} from 'react/cjs/react.development';
 import Footer from '../components/Footer';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 function Order() {
   const [seat, setSeat] = useState('');
   const [numberSeat, setNumberSeat] = useState('');
+  const [rowSelectSeat, setRowSelectSeat] = useState(1);
   const navigation = useNavigation();
+  const listSeat = useSelector((state) => state.transaction.listSeat);
+  const handlePress = () => {};
   return (
     <>
       <ScrollView>
@@ -59,146 +63,76 @@ function Order() {
               </View>
             </View>
           </View>
+          <View style={styles.card}>
+            <View style={styles.rowChoosed}>
+              <Text style={styles.textXhoosed}>Choosed</Text>
+              <Text style={styles.textListSeat}>{listSeat.join(', ')}</Text>
+            </View>
+          </View>
           <View style={styles.cardParent2}>
-            <View style={styles.rowCard}>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={seat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((item, index) => {
-                      return (
-                        <Picker.Item label={`${item}`} value={`${item}`} />
-                      );
-                    })}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
+            {[...Array(rowSelectSeat)].map((item, index) => {
+              return (
+                <View style={styles.rowCard}>
+                  <TouchableOpacity>
+                    <View style={styles.cardSeatSelect}>
+                      <Picker
+                        selectedValue={seat}
+                        style={styles.dropdown}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setSeat(itemValue)
+                        }>
+                        <Picker.Item label="Choose Seat" value="Choose Seat" />
+                        {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(
+                          (item, index) => {
+                            return (
+                              <Picker.Item
+                                label={`${item}`}
+                                value={`${item}`}
+                                key={String(index)}
+                              />
+                            );
+                          },
+                        )}
+                      </Picker>
+                      <Icon
+                        name="chevron-down"
+                        style={styles.iconArrowSelectSeat}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <View style={styles.cardSeatSelect}>
+                      <Picker
+                        selectedValue={numberSeat}
+                        style={styles.dropdown}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setNumberSeat(itemValue)
+                        }>
+                        <Picker.Item label="Choose Seat" value="Choose Seat" />
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(
+                          (item, index) => {
+                            return (
+                              <Picker.Item
+                                label={`${item}`}
+                                value={`${item}`}
+                                key={String(index)}
+                              />
+                            );
+                          },
+                        )}
+                      </Picker>
+                      <Icon
+                        name="chevron-down"
+                        style={styles.iconArrowSelectSeat}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={numberSeat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setNumberSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(
-                      (item, index) => {
-                        return (
-                          <Picker.Item label={`${item}`} value={`${item}`} />
-                        );
-                      },
-                    )}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rowCard}>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={seat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((item, index) => {
-                      return (
-                        <Picker.Item label={`${item}`} value={`${item}`} />
-                      );
-                    })}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={numberSeat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setNumberSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(
-                      (item, index) => {
-                        return (
-                          <Picker.Item label={`${item}`} value={`${item}`} />
-                        );
-                      },
-                    )}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rowCard}>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={seat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((item, index) => {
-                      return (
-                        <Picker.Item label={`${item}`} value={`${item}`} />
-                      );
-                    })}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={styles.cardSeatSelect}>
-                  <Picker
-                    selectedValue={numberSeat}
-                    style={styles.dropdown}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setNumberSeat(itemValue)
-                    }>
-                    <Picker.Item label="Choose Seat" value="Choose Seat" />
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(
-                      (item, index) => {
-                        return (
-                          <Picker.Item label={`${item}`} value={`${item}`} />
-                        );
-                      },
-                    )}
-                  </Picker>
-                  <Icon
-                    name="chevron-down"
-                    style={styles.iconArrowSelectSeat}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.btnAddNewSeat}>
+              );
+            })}
+            <TouchableOpacity
+              style={styles.btnAddNewSeat}
+              onPress={() => setRowSelectSeat(rowSelectSeat + 1)}>
               <View>
                 <Text style={{fontWeight: 'bold', color: '#5F2EEA'}}>
                   Add New Seat
@@ -207,13 +141,21 @@ function Order() {
             </TouchableOpacity>
           </View>
           <View style={styles.rowBtnCheckout}>
-            <TouchableOpacity
-              style={styles.btnCheckout}
-              onPress={() => navigation.navigate('Payment')}>
-              <Text style={{fontWeight: 'bold', color: 'white'}}>
-                Checkout Now
-              </Text>
-            </TouchableOpacity>
+            {listSeat.length === 0 ? (
+              <View style={styles.btnCheckoutDisabled}>
+                <Text style={{fontWeight: 'bold', color: 'white'}}>
+                  Checkout Now
+                </Text>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.btnCheckout}
+                onPress={() => navigation.navigate('Payment')}>
+                <Text style={{fontWeight: 'bold', color: 'white'}}>
+                  Checkout Now
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={{backgroundColor: 'white'}}>
@@ -243,10 +185,18 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
+  card: {
+    width: '100%',
+    borderRadius: 20,
+    backgroundColor: 'white',
+    marginTop: 20,
+    elevation: 2,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
   cardParent2: {
     width: '100%',
     borderRadius: 20,
-    height: 400,
     backgroundColor: 'white',
     marginTop: 20,
     elevation: 2,
@@ -367,6 +317,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     marginVertical: 40,
+  },
+  btnCheckoutDisabled: {
+    width: '100%',
+    height: 56,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginVertical: 40,
+  },
+  rowChoosed: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textChoosed: {
+    fontSize: 16,
+    color: '#4E4B66',
+    fontWeight: '600',
+  },
+  textListSeat: {
+    fontSize: 17,
+    fontWeight: 'bold',
   },
 });
 

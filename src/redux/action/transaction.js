@@ -21,6 +21,40 @@ export const chooseMovie = (id) => {
 
 export const cinemaTimeSelected = (idCinema, idTime) => {
   return async (dispatch) => {
-    dispatch({});
+    try {
+      const showTime = await http().get(`showtime/${idTime}`);
+      dispatch({
+        type: 'TIME_SELECTED',
+        payload: showTime.data.results,
+      });
+      const cinemaSelected = await http().get(`cinemas/${idCinema}`);
+      dispatch({
+        type: 'CINEMA_SELECTED',
+        payload: cinemaSelected.data.results,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'MSG_TRANSACTION',
+        payload: 'Sorry something is wrong',
+      });
+    }
+  };
+};
+
+export const listSeat = (seat) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'LIST_SEAT',
+      payload: seat,
+    });
+  };
+};
+
+export const totalPayment = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'TOTAL_PAYMENT',
+      payload: data,
+    });
   };
 };

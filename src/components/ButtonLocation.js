@@ -23,7 +23,9 @@ function ButtonLocation() {
           <Picker.Item label="Choose Location" value="Choose Location" />
           {listCity.length !== 0 ? (
             listCity.map((item, index) => {
-              return <Picker.Item label={item} value={item} />;
+              return (
+                <Picker.Item label={item} value={item} key={String(index)} />
+              );
             })
           ) : (
             <ActivityIndicator />

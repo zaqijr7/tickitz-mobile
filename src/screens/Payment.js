@@ -12,14 +12,42 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Footer from '../components/Footer';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import http from '../helper/http';
+import {useState} from 'react/cjs/react.development';
 
 function Payment() {
   const navigation = useNavigation();
+  const totalPayment = useSelector((state) => state.transaction.totalPayment);
+  const profile = useSelector((state) => state.auth.profile);
+  const token = useSelector((state) => state.auth.token);
+  const transaction = useSelector((state) => state.transaction);
+  const date = useSelector((state) => state.findSchedule.date);
+  const seat = transaction.listSeat.join();
+  const [statueRes, setStatusRes] = useState('');
+
+  const handlePress = async () => {
+    const params = new URLSearchParams();
+    params.append('id_user', profile.id);
+    params.append('id_movie', transaction.movie.id);
+    params.append('id_cinema', transaction.cinema.id);
+    params.append('id_showtime', transaction.showTime.id);
+    params.append('showDate', date);
+    params.append('seat', seat);
+    params.append('totalPayment', totalPayment);
+    try {
+      const results = await http(token).post('transaction', params);
+      console.log(results);
+      navigation.navigate('Ticket');
+    } catch (err) {
+      setStatusRes(500);
+    }
+  };
   return (
     <ScrollView>
       <View style={style.rowTotalPayment}>
         <Text style={style.textTotalPayment}>Total Payment</Text>
-        <Text style={style.textTotalCount}>$30.00</Text>
+        <Text style={style.textTotalCount}>${`${totalPayment}`}</Text>
       </View>
       <Text style={style.textPaymnetMethod}>Payment Method</Text>
       <View style={style.parentWrapperCardPayment}>
@@ -64,23 +92,20 @@ function Payment() {
             <View>
               <Text style={style.labelForm}>Full Name</Text>
               <TextInput
-                placeholder="Muhammad Zaqi A"
+                placeholder={`${profile.firstName} ${profile.lastName}`}
                 style={style.formInput}
               />
             </View>
             <View style={style.wrapperInput}>
               <Text style={style.labelForm}>Email</Text>
-              <TextInput
-                placeholder="zaqijr7@gmail.com"
-                style={style.formInput}
-              />
+              <TextInput placeholder={profile.email} style={style.formInput} />
             </View>
             <View style={style.wrapperInput}>
               <Text style={style.labelForm}>Phone Number</Text>
               <View style={style.wrapperInputPhoneNumber}>
                 <Text style={style.text62}>+62</Text>
                 <TextInput
-                  placeholder="85842752523"
+                  placeholder={profile.phoneNumber}
                   style={style.formInputPhoneNumber}
                   keyboardType="phone-pad"
                 />
@@ -100,7 +125,7 @@ function Payment() {
         </View>
         <TouchableOpacity
           style={style.btnPayOrder}
-          onPress={() => navigation.navigate('Ticket')}>
+          onPress={() => handlePress()}>
           <Text style={{fontWeight: 'bold', fontSize: 16, color: 'white'}}>
             Pay Your Order
           </Text>

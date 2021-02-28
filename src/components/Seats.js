@@ -1,16 +1,68 @@
 import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {useEffect} from 'react/cjs/react.development';
+import http from '../helper/http';
+import {listSeat, totalPayment} from '../redux/action/transaction';
 
 function Seats() {
   const [select, setSelect] = useState([]);
+  const [seatSold, setSeatSold] = useState('');
+  const [statusRes, setStatusRes] = useState('');
+  const [price, setPrice] = useState(0);
+  const dispatch = useDispatch();
+  const movieTitle = useSelector((state) => state.transaction.movie.title);
+  const priceMovie = useSelector((state) => state.transaction.movie.price);
+  const date = useSelector((state) => state.findSchedule.date);
+  const showtime = useSelector((state) => state.transaction.showTime.name);
+  const cinema = useSelector((state) => state.transaction.cinema.name);
   const handleClick = (data) => {
     if (select.includes(data) === true) {
       setSelect(select.filter((items) => items !== data));
+      dispatch(listSeat(select.filter((items) => items !== data)));
+      if (data === 'F10') {
+        const loveNest = priceMovie * 2;
+        setPrice(price - loveNest);
+        dispatch(totalPayment(price - loveNest));
+      } else {
+        setPrice(price - priceMovie);
+        dispatch(totalPayment(price - priceMovie));
+      }
     } else {
       setSelect([...select, data]);
+      dispatch(listSeat([...select, data]));
+      if (data === 'F10') {
+        const loveNest = priceMovie * 2;
+        setPrice(price + loveNest);
+        dispatch(totalPayment(price + loveNest));
+      } else {
+        setPrice(price + priceMovie);
+        dispatch(totalPayment(price + priceMovie));
+      }
     }
   };
-  console.log(select);
+
+  console.log(price, '<< ini harganya');
+
+  const getDataSeatsIsSold = async () => {
+    try {
+      const seatIsSold = await http().get(
+        `/seat/sold?movie=${movieTitle}&cinema=${cinema}&showTime=${showtime}&showDate=${date}`,
+      );
+      if (seatIsSold.data.results.listSold !== null) {
+        setSeatSold(seatIsSold.data.results.listSold);
+      } else {
+        setSeatSold('a, b');
+      }
+    } catch (err) {
+      setStatusRes(500);
+    }
+  };
+
+  useEffect(() => {
+    getDataSeatsIsSold();
+    console.log(seatSold);
+  });
   return (
     <>
       <View style={styleSeat.rowParent}>
@@ -18,20 +70,26 @@ function Seats() {
         <View style={styleSeat.cardSeat}>
           {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((col) => {
             return (
-              <View style={styleSeat.row}>
+              <View style={styleSeat.row} key={String(col)}>
                 {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
                   return (
-                    <TouchableOpacity
-                      key={String(index)}
-                      onPress={() => handleClick(`${col}${row}`)}>
-                      <View
-                        style={
-                          select.includes(`${col}${row}`) === true
-                            ? styleSeat.clicked
-                            : styleSeat.seat
-                        }
-                      />
-                    </TouchableOpacity>
+                    <>
+                      {seatSold.split(',').indexOf(`${col}${row}`) > -1 ? (
+                        <View style={styleSeat.seatSold} />
+                      ) : (
+                        <TouchableOpacity
+                          key={String(index)}
+                          onPress={() => handleClick(`${col}${row}`)}>
+                          <View
+                            style={
+                              select.includes(`${col}${row}`) === true
+                                ? styleSeat.clicked
+                                : styleSeat.seat
+                            }
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </>
                   );
                 })}
               </View>
@@ -42,32 +100,52 @@ function Seats() {
         <View style={styleSeat.cardSeat}>
           {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((col) => {
             return (
-              <View style={styleSeat.row}>
+              <View style={styleSeat.row} key={col}>
                 {[8, 9, 10, 11, 12, 13, 14]
                   .filter((row) => (col === 'F' && row !== 11) || col !== 'F')
                   .map((row, index) => {
                     return (
-                      <TouchableOpacity
-                        key={String(index)}
-                        onPress={() => handleClick(`${col}${row}`)}>
+                      <>
                         {col === 'F' && row === 10 ? (
-                          <View
-                            style={
-                              select.includes(`${col}${row}`) === true
-                                ? styleSeat.loveNestClicked
-                                : styleSeat.loveNest
-                            }
-                          />
+                          <>
+                            {seatSold.split(',').indexOf(`${col}${row}`) >
+                            -1 ? (
+                              <View style={styleSeat.loveNestSold} />
+                            ) : (
+                              <TouchableOpacity
+                                key={String(index)}
+                                onPress={() => handleClick(`${col}${row}`)}>
+                                <View
+                                  style={
+                                    select.includes(`${col}${row}`) === true
+                                      ? styleSeat.loveNestClicked
+                                      : styleSeat.loveNest
+                                  }
+                                />
+                              </TouchableOpacity>
+                            )}
+                          </>
                         ) : (
-                          <View
-                            style={
-                              select.includes(`${col}${row}`) === true
-                                ? styleSeat.clicked
-                                : styleSeat.seat
-                            }
-                          />
+                          <>
+                            {seatSold.split(',').indexOf(`${col}${row}`) >
+                            -1 ? (
+                              <View style={styleSeat.seatSold} />
+                            ) : (
+                              <TouchableOpacity
+                                key={String(index)}
+                                onPress={() => handleClick(`${col}${row}`)}>
+                                <View
+                                  style={
+                                    select.includes(`${col}${row}`) === true
+                                      ? styleSeat.clicked
+                                      : styleSeat.seat
+                                  }
+                                />
+                              </TouchableOpacity>
+                            )}
+                          </>
                         )}
-                      </TouchableOpacity>
+                      </>
                     );
                   })}
               </View>
@@ -82,8 +160,8 @@ function Seats() {
 
 const styleSeat = StyleSheet.create({
   seat: {
-    height: 16,
-    width: 16,
+    height: 14,
+    width: 14,
     backgroundColor: '#D6D8E7',
     margin: 2.5,
     borderRadius: 3,
@@ -97,22 +175,36 @@ const styleSeat = StyleSheet.create({
     marginTop: 20,
   },
   clicked: {
-    height: 16,
-    width: 16,
+    height: 14,
+    width: 14,
     backgroundColor: '#5F2EEA',
     margin: 2.5,
     borderRadius: 3,
   },
+  seatSold: {
+    height: 14,
+    width: 14,
+    backgroundColor: '#6E7191',
+    margin: 2.5,
+    borderRadius: 3,
+  },
   loveNest: {
-    height: 16,
-    width: 37,
+    height: 14,
+    width: 33,
     backgroundColor: '#F589D7',
     margin: 2.5,
     borderRadius: 3,
   },
+  loveNestSold: {
+    height: 14,
+    width: 33,
+    backgroundColor: '#6E7191',
+    margin: 2.5,
+    borderRadius: 3,
+  },
   loveNestClicked: {
-    height: 16,
-    width: 37,
+    height: 14,
+    width: 33,
     backgroundColor: '#5F2EEA',
     margin: 2.5,
     borderRadius: 3,

@@ -1,11 +1,18 @@
 import React from 'react';
 import {Image, Text, ScrollView, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 import success from '../assets/icons/successTicket.png';
 import barCode from '../assets/images/barcode.png';
 import Footer from '../components/Footer';
+import moment from 'moment';
 
 function Ticket() {
+  const movieTitle = useSelector((state) => state.transaction.movie.title);
+  const time = useSelector((state) => state.transaction.showTime.name);
+  const date = useSelector((state) => state.findSchedule.date);
+  const seat = useSelector((state) => state.transaction.listSeat);
+  const totalPayment = useSelector((state) => state.transaction.totalPayment);
   return (
     <>
       <ScrollView>
@@ -35,7 +42,7 @@ function Ticket() {
             <View style={styles.rowTicketInfo}>
               <View style={styles.cardInfo}>
                 <Text style={styles.titleInfo}>Movie</Text>
-                <Text style={styles.textValue}>Spiderman :...</Text>
+                <Text style={styles.textValue}>{movieTitle}</Text>
               </View>
               <View style={styles.cardInfo}>
                 <Text style={styles.titleInfo}>Category</Text>
@@ -45,27 +52,31 @@ function Ticket() {
             <View style={styles.rowTicketInfo}>
               <View style={styles.cardInfo}>
                 <Text style={styles.titleInfo}>Date</Text>
-                <Text style={styles.textValue}>07 Jul</Text>
+                <Text style={styles.textValue}>
+                  {moment(date).format('LL')}
+                </Text>
               </View>
               <View style={styles.cardInfo}>
                 <Text style={styles.titleInfo}>Time</Text>
-                <Text style={styles.textValue}>2:00pm</Text>
+                <Text style={styles.textValue}>{time}</Text>
               </View>
             </View>
             <View style={styles.rowTicketInfo}>
               <View style={styles.cardInfo}>
                 <Text>Count</Text>
-                <Text style={styles.textValue}>3 pcs</Text>
+                <Text style={styles.textValue}>{seat.length} pcs</Text>
               </View>
               <View style={styles.cardInfo}>
                 <Text>Seats</Text>
-                <Text style={styles.textValue}>C4, C5, C6</Text>
+                <Text style={styles.textValue}>{seat.join(', ')}</Text>
               </View>
             </View>
             <View style={styles.rowBtnTotal}>
               <TouchableOpacity style={styles.btnTotal}>
                 <Text>Total</Text>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>$30.00</Text>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                  ${totalPayment}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -81,7 +92,7 @@ function Ticket() {
 const styles = StyleSheet.create({
   parentLayer: {
     width: '100%',
-    paddingHorizontal: 50,
+    paddingHorizontal: 35,
     paddingVertical: 70,
     backgroundColor: '#5F2EEA',
   },

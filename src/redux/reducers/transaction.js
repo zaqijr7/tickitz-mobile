@@ -1,7 +1,10 @@
 const initialState = {
   movie: [],
-  showTime: '',
+  showTime: [],
   cinema: [],
+  listSeat: [],
+  totalPayment: 0,
+  msgResponse: '',
 };
 
 const transactionReducer = (state = initialState, action) => {
@@ -10,6 +13,31 @@ const transactionReducer = (state = initialState, action) => {
       return {
         ...state,
         movie: action.payload,
+      };
+    case 'TIME_SELECTED':
+      return {
+        ...state,
+        showTime: action.payload,
+      };
+    case 'CINEMA_SELECTED':
+      return {
+        ...state,
+        cinema: action.payload,
+      };
+    case 'MSG_TRANSACTION':
+      return {
+        ...state,
+        cinema: action.payload,
+      };
+    case 'LIST_SEAT':
+      return {
+        ...state,
+        listSeat: action.payload,
+      };
+    case 'TOTAL_PAYMENT':
+      return {
+        ...state,
+        totalPayment: action.payload,
       };
     default:
       return state;

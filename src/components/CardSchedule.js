@@ -10,16 +10,19 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import {cinemaTimeSelected} from '../redux/action/transaction';
 import ebv from '../assets/icons/ebv.png';
 
 function CardSchedule(props) {
   const navigation = useNavigation();
   const [cinemaSelect, setCinemaSelect] = useState('');
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState(null);
   const dispatch = useDispatch();
   const handlePress = (idCinema) => {
-    dispatch()
+    dispatch(cinemaTimeSelected(idCinema, time));
+    navigation.navigate('Order');
   };
+  console.log(time);
   return (
     <>
       <View style={styles.parentWrapper}>
@@ -32,7 +35,10 @@ function CardSchedule(props) {
           <View style={styles.rowTime}>
             {props.listShowTime.map((items, index) => {
               return (
-                <TouchableOpacity onPress={() => setTime(items[0].id)}>
+                <TouchableOpacity
+                  key={String(index)}
+                  style={time === items[0].id ? styles.clicked : ''}
+                  onPress={() => setTime(items[0].id)}>
                   <Text style={styles.textTime}>{items[0].name}</Text>
                 </TouchableOpacity>
               );
@@ -43,11 +49,17 @@ function CardSchedule(props) {
             <Text style={styles.textPriceSeat}>${`${props.price}`}/seat</Text>
           </View>
           <View style={styles.rowBtn}>
-            <TouchableOpacity onPress={() => handlePress(props.idCinema)}>
-              <View style={styles.btnBookNow}>
+            {time === null ? (
+              <View style={styles.buttonDisabled}>
                 <Text style={styles.titleBtn1}>Book Now</Text>
               </View>
-            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => handlePress(props.idCinema)}>
+                <View style={styles.btnBookNow}>
+                  <Text style={styles.titleBtn1}>Book Now</Text>
+                </View>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity>
               <View style={styles.btnCart}>
                 <Text style={styles.titleBtn2}>Add to Cart</Text>
@@ -145,6 +157,19 @@ const styles = StyleSheet.create({
   imageLogo: {
     width: 120,
     height: 37.5,
+  },
+  clicked: {
+    borderWidth: 1,
+    borderColor: '#5F2EEA',
+    borderRadius: 10,
+  },
+  buttonDisabled: {
+    width: 134,
+    height: 40,
+    backgroundColor: 'gray',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

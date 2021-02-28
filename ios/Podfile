@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'tickitzMobile' do
+target 'Tickitz' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
@@ -16,7 +16,7 @@ target 'tickitzMobile' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
-  target 'tickitzMobileTests' do
+  target 'TickitzTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -31,10 +31,10 @@ target 'tickitzMobile' do
   end
 end
 
-target 'tickitzMobile-tvOS' do
-  # Pods for tickitzMobile-tvOS
+target 'Tickitz-tvOS' do
+  # Pods for Tickitz-tvOS
 
-  target 'tickitzMobile-tvOSTests' do
+  target 'Tickitz-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

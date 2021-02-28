@@ -30,7 +30,7 @@ function Login() {
     setTimeout(() => {
       dispatch(login(email, password));
       setIsLoading(false);
-    }, 3000);
+    }, 1000);
   };
   console.log(msg, '< ini pesannya');
   return (

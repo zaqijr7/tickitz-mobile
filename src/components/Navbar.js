@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import {REACT_APP_API_URL as API_URL} from '@env';
 import Logo from '../assets/icons/tickitz-1.png';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
@@ -29,7 +30,8 @@ function Navbar({children}) {
             <Image source={Logo} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setBodyHeader(!bodyHeader)}>
-            {photoProfile !== 'UNDEFINED' ? (
+            {photoProfile !== `${API_URL}UNDEFINED` &&
+            photoProfile !== `${API_URL}undefined` ? (
               <Image source={{uri: photoProfile}} style={styles.photoProfile} />
             ) : (
               <Icon name="bars" style={styles.iconBar} />

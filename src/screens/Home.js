@@ -24,9 +24,11 @@ import UpcomingCard from '../components/UpcomingCard';
 import Footer from '../components/Footer';
 import {useEffect, useState} from 'react/cjs/react.development';
 import http from '../helper/http';
+import {useNavigation} from '@react-navigation/native';
 
-function Home({navigation}) {
+function Home() {
   const [nowShow, setNowShow] = useState([]);
+  const navigation = useNavigation();
 
   const getNowShow = async () => {
     const response = await http().get('nowshow');
@@ -48,7 +50,7 @@ function Home({navigation}) {
         <View style={styles.nowShowingRow}>
           <View style={styles.nowShowing}>
             <Text style={styles.nowShowingText}>Now Showing</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('ViewAll')}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>

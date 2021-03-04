@@ -17,6 +17,7 @@ import Profile from '../screens/Profile';
 import OrderHistory from '../screens/OrderHistory';
 import Admin from '../screens/Admin';
 import {useSelector} from 'react-redux';
+import ViewAll from '../screens/ViewAll';
 
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
@@ -81,6 +82,12 @@ function NavigationScreenRoot() {
             <Stack.Screen
               component={OrderHistory}
               name="OrderHistory"
+              options={options}
+            />
+
+            <Stack.Screen
+              component={ViewAll}
+              name="ViewAll"
               options={options}
             />
           </>

@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updatePhoto, updateProfileUser} from '../redux/action/auth';
 import http from '../helper/http';
 import ModalSuccess from '../components/ModalSuccess';
+import {REACT_APP_API_URL as API_URL} from '@env';
 
 function Profile() {
   const navigation = useNavigation();
@@ -86,6 +87,18 @@ function Profile() {
     }, 8000);
   };
 
+  const deletePhoto = async () => {
+    const data = new URLSearchParams();
+    data.append('id', profile.id);
+    data.append('photo', 'UNDEFINED');
+    const response = await http(token).delete('update/photo', data);
+    dispatch(updatePhoto(token, profile.id));
+    setMsgRes(response.data.message);
+    setTimeout(() => {
+      setMsgRes(null);
+    }, 8000);
+  };
+
   const updateProfile = async () => {
     const params = new URLSearchParams();
     params.append('firstName', firstName || profile.firstName);
@@ -138,6 +151,11 @@ function Profile() {
               </View>
               <View style={styles.rowBtnClose}>
                 <TouchableOpacity
+                  style={styles.btnDelete}
+                  onPress={() => deletePhoto()}>
+                  <Icon name="trash" style={styles.iconTrash} />
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={styles.btnClose}
                   onPress={() => setShowModal(false)}>
                   <Text style={styles.textBtn}>Close</Text>
@@ -165,7 +183,8 @@ function Profile() {
               <Icon name="ellipsis-h" style={{fontSize: 19}} />
             </View>
             <View style={styles.rowPicture}>
-              {profile.photo === 'UNDEFINED' ? (
+              {(profile.photo === `${API_URL}UNDEFINED` && image === null) ||
+              (profile.photo === `${API_URL}undefined` && image === null) ? (
                 <TouchableOpacity
                   style={styles.parentWrapperPicture}
                   onPress={() => choosePhotto()}>
@@ -576,6 +595,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    flexDirection: 'row',
   },
   btnClose: {
     height: 40,
@@ -584,6 +604,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ba0900',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  btnDelete: {
+    height: 40,
+    width: 40,
+    borderRadius: 10,
+    backgroundColor: '#ba0900',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  iconTrash: {
+    fontSize: 18,
+    color: 'white',
   },
   btnUpload: {
     height: 40,

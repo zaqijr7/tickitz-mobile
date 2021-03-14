@@ -2,6 +2,7 @@ const initialState = {
   token: null,
   message: '',
   profile: [],
+  emailReset: '',
 };
 
 const authReducer = (state = initialState, action) => {
@@ -26,6 +27,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.msg,
+      };
+    case 'EMAIL_RESET':
+      return {
+        ...state,
+        emailReset: action.payload,
       };
     default:
       return state;

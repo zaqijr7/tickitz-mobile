@@ -39,6 +39,15 @@ const transactionReducer = (state = initialState, action) => {
         ...state,
         totalPayment: action.payload,
       };
+    case 'RESET_DATA_TRANSACTION':
+      return {
+        ...state,
+        movie: [],
+        showTime: [],
+        cinema: [],
+        listSeat: [],
+        totalPayment: 0,
+      };
     default:
       return state;
   }

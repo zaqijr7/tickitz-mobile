@@ -58,3 +58,12 @@ export const destoryToken = () => {
     });
   };
 };
+
+export const emailReset = (email) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'EMAIL_RESET',
+      payload: email,
+    });
+  };
+};

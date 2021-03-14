@@ -1,21 +1,14 @@
 import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {useEffect} from 'react/cjs/react.development';
-import http from '../helper/http';
 import {listSeat, totalPayment} from '../redux/action/transaction';
 
 function Seats() {
   const [select, setSelect] = useState([]);
-  const [seatSold, setSeatSold] = useState('');
-  const [statusRes, setStatusRes] = useState('');
+  const seatSold = useSelector((state) => state.findSchedule.seatSold);
   const [price, setPrice] = useState(0);
   const dispatch = useDispatch();
-  const movieTitle = useSelector((state) => state.transaction.movie.title);
   const priceMovie = useSelector((state) => state.transaction.movie.price);
-  const date = useSelector((state) => state.findSchedule.date);
-  const showtime = useSelector((state) => state.transaction.showTime.name);
-  const cinema = useSelector((state) => state.transaction.cinema.name);
   const handleClick = (data) => {
     if (select.includes(data) === true) {
       setSelect(select.filter((items) => items !== data));
@@ -42,27 +35,6 @@ function Seats() {
     }
   };
 
-  console.log(price, '<< ini harganya');
-
-  const getDataSeatsIsSold = async () => {
-    try {
-      const seatIsSold = await http().get(
-        `/seat/sold?movie=${movieTitle}&cinema=${cinema}&showTime=${showtime}&showDate=${date}`,
-      );
-      if (seatIsSold.data.results.listSold !== null) {
-        setSeatSold(seatIsSold.data.results.listSold);
-      } else {
-        setSeatSold('a, b');
-      }
-    } catch (err) {
-      setStatusRes(500);
-    }
-  };
-
-  useEffect(() => {
-    getDataSeatsIsSold();
-    console.log(seatSold);
-  });
   return (
     <>
       <View style={styleSeat.rowParent}>

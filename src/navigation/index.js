@@ -1,7 +1,5 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 //import screen
 import Login from '../screens/Login';
@@ -18,14 +16,15 @@ import OrderHistory from '../screens/OrderHistory';
 import Admin from '../screens/Admin';
 import {useSelector} from 'react-redux';
 import ViewAll from '../screens/ViewAll';
+import ResetPassword from '../screens/ResetPassword';
 
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
-  const Tab = createMaterialTopTabNavigator();
   const token = useSelector((state) => state.auth.token);
   const options = {
     header: () => <Navbar />,
   };
+
   return (
     <>
       <Stack.Navigator>
@@ -50,6 +49,15 @@ function NavigationScreenRoot() {
             <Stack.Screen
               component={Forgot}
               name="Forgot"
+              options={{
+                headerShown: false,
+              }}
+            />
+
+            <Stack.Screen
+              component={ResetPassword}
+              name="ResetPassword"
+              path="resetpassword"
               options={{
                 headerShown: false,
               }}

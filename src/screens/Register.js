@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   Image,
@@ -9,12 +9,11 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
-import {set} from 'react-native-reanimated';
 
 //import Icon
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
 
 //import logo
 import Logo from '../assets/icons/tickitz-1.png';
@@ -29,6 +28,20 @@ function Register() {
   const [msgResponse, setMsgResponse] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigation = useNavigation();
+
+  const getInitUrl = async () => {
+    await Linking.getInitialURL().then((URL) => {
+      console.log(URL, 'ini url deeplink');
+      const url = URL;
+      if (url) {
+        navigation.navigate('ResetPassword');
+      }
+    });
+  };
+
+  useEffect(() => {
+    getInitUrl();
+  });
 
   const handlePress = async () => {
     setIsLoading(!isLoading);

@@ -19,7 +19,7 @@ export const chooseMovie = (id) => {
   };
 };
 
-export const cinemaTimeSelected = (idCinema, idTime) => {
+export const cinemaTimeSelected = (idCinema, idTime, movieTitle, dateShow) => {
   return async (dispatch) => {
     try {
       const showTime = await http().get(`showtime/${idTime}`);
@@ -32,6 +32,27 @@ export const cinemaTimeSelected = (idCinema, idTime) => {
         type: 'CINEMA_SELECTED',
         payload: cinemaSelected.data.results,
       });
+      try {
+        const seatIsSold = await http().get(
+          `/seat/sold?movie=${movieTitle}&cinema=${cinemaSelected.data.results.name}&showTime=${showTime.data.results.name}&showDate=${dateShow}`,
+        );
+        if (seatIsSold.data.results.listSold !== null) {
+          dispatch({
+            type: 'SEAT_SOLD',
+            payload: seatIsSold.data.results.listSold,
+          });
+        } else {
+          dispatch({
+            type: 'SEAT_SOLD',
+            payload: 'a, b',
+          });
+        }
+      } catch (err) {
+        dispatch({
+          type: 'MESSAGE_RESPONSE',
+          payload: 'Server Error',
+        });
+      }
     } catch (err) {
       dispatch({
         type: 'MSG_TRANSACTION',
@@ -55,6 +76,17 @@ export const totalPayment = (data) => {
     dispatch({
       type: 'TOTAL_PAYMENT',
       payload: data,
+    });
+  };
+};
+
+export const resetDataTransaction = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'RESET_DATA_TRANSACTION',
+    });
+    dispatch({
+      type: 'RESET_FIND_SCHEDULE',
     });
   };
 };

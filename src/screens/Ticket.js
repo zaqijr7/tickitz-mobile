@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, Text, ScrollView, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import success from '../assets/icons/successTicket.png';
 import barCode from '../assets/images/barcode.png';
 import Footer from '../components/Footer';
 import moment from 'moment';
+import {resetDataTransaction} from '../redux/action/transaction';
 
 function Ticket() {
   const movieTitle = useSelector((state) => state.transaction.movie.title);
@@ -13,6 +14,12 @@ function Ticket() {
   const date = useSelector((state) => state.findSchedule.date);
   const seat = useSelector((state) => state.transaction.listSeat);
   const totalPayment = useSelector((state) => state.transaction.totalPayment);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatch(resetDataTransaction());
+    };
+  }, []);
   return (
     <>
       <ScrollView>

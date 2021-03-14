@@ -9,17 +9,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {cinemaTimeSelected} from '../redux/action/transaction';
 import ebv from '../assets/icons/ebv.png';
 
 function CardSchedule(props) {
   const navigation = useNavigation();
-  const [cinemaSelect, setCinemaSelect] = useState('');
+  const movieTitle = useSelector((state) => state.transaction.movie.title);
+  const dateShow = useSelector((state) => state.findSchedule.date);
   const [time, setTime] = useState(null);
   const dispatch = useDispatch();
   const handlePress = (idCinema) => {
-    dispatch(cinemaTimeSelected(idCinema, time));
+    dispatch(cinemaTimeSelected(idCinema, time, movieTitle, dateShow));
     navigation.navigate('Order');
   };
   console.log(time);

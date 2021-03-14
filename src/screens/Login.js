@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 //import action
 import {login} from '../redux/action/auth';
 import {useNavigation} from '@react-navigation/native';
+import PushNotification from 'react-native-push-notification';
 
 function Login() {
   const dispatch = useDispatch();
@@ -26,6 +27,11 @@ function Login() {
   const msg = useSelector((state) => state.auth.message);
   const navigation = useNavigation();
   const handlePress = () => {
+    PushNotification.localNotification({
+      channelId: 'general',
+      title: 'Your Activity',
+      message: 'you just logged in',
+    });
     setIsLoading(!isLoading);
     setTimeout(() => {
       dispatch(login(email, password));

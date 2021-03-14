@@ -2,6 +2,8 @@ const initialState = {
   listCity: [],
   date: '',
   city: '',
+  seatSold: '',
+  msgResponse: '',
 };
 
 const scheduleReducer = (state = initialState, action) => {
@@ -20,6 +22,23 @@ const scheduleReducer = (state = initialState, action) => {
       return {
         ...state,
         listCity: action.payload,
+      };
+    case 'SEAT_SOLD':
+      return {
+        ...state,
+        seatSold: action.payload,
+      };
+    case 'RESET_FIND_SCHEDULE':
+      return {
+        ...state,
+        date: '',
+        city: '',
+        seatSold: '',
+      };
+    case 'MESSAGE_RESPONSE':
+      return {
+        ...state,
+        msgResponse: '',
       };
     default:
       return state;

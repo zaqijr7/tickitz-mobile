@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 function NowShowingCard(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const movieSelect = (id) => {
+  const movieSelect = id => {
     dispatch(chooseMovie(id));
     navigation.navigate('MovieDetail');
   };

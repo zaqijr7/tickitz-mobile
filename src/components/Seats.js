@@ -5,14 +5,14 @@ import {listSeat, totalPayment} from '../redux/action/transaction';
 
 function Seats() {
   const [select, setSelect] = useState([]);
-  const seatSold = useSelector((state) => state.findSchedule.seatSold);
+  const seatSold = useSelector(state => state.findSchedule.seatSold);
   const [price, setPrice] = useState(0);
   const dispatch = useDispatch();
-  const priceMovie = useSelector((state) => state.transaction.movie.price);
-  const handleClick = (data) => {
+  const priceMovie = useSelector(state => state.transaction.movie.price);
+  const handleClick = data => {
     if (select.includes(data) === true) {
-      setSelect(select.filter((items) => items !== data));
-      dispatch(listSeat(select.filter((items) => items !== data)));
+      setSelect(select.filter(items => items !== data));
+      dispatch(listSeat(select.filter(items => items !== data)));
       if (data === 'F10') {
         const loveNest = priceMovie * 2;
         setPrice(price - loveNest);
@@ -40,7 +40,7 @@ function Seats() {
       <View style={styleSeat.rowParent}>
         <View style={styleSeat.lineColumn} />
         <View style={styleSeat.cardSeat}>
-          {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((col) => {
+          {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(col => {
             return (
               <View style={styleSeat.row} key={String(col)}>
                 {[1, 2, 3, 4, 5, 6, 7].map((row, index) => {
@@ -70,11 +70,11 @@ function Seats() {
           <View style={styleSeat.lineNumber} />
         </View>
         <View style={styleSeat.cardSeat}>
-          {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((col) => {
+          {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map(col => {
             return (
               <View style={styleSeat.row} key={col}>
                 {[8, 9, 10, 11, 12, 13, 14]
-                  .filter((row) => (col === 'F' && row !== 11) || col !== 'F')
+                  .filter(row => (col === 'F' && row !== 11) || col !== 'F')
                   .map((row, index) => {
                     return (
                       <>

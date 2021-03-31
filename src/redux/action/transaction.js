@@ -1,7 +1,7 @@
 import http from '../../helper/http';
 
-export const chooseMovie = (id) => {
-  return async (dispatch) => {
+export const chooseMovie = id => {
+  return async dispatch => {
     try {
       const response = await http().get(`movies/${id}`);
       dispatch({
@@ -20,7 +20,7 @@ export const chooseMovie = (id) => {
 };
 
 export const cinemaTimeSelected = (idCinema, idTime, movieTitle, dateShow) => {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       const showTime = await http().get(`showtime/${idTime}`);
       dispatch({
@@ -62,8 +62,8 @@ export const cinemaTimeSelected = (idCinema, idTime, movieTitle, dateShow) => {
   };
 };
 
-export const listSeat = (seat) => {
-  return async (dispatch) => {
+export const listSeat = seat => {
+  return async dispatch => {
     dispatch({
       type: 'LIST_SEAT',
       payload: seat,
@@ -71,8 +71,8 @@ export const listSeat = (seat) => {
   };
 };
 
-export const totalPayment = (data) => {
-  return async (dispatch) => {
+export const totalPayment = data => {
+  return async dispatch => {
     dispatch({
       type: 'TOTAL_PAYMENT',
       payload: data,
@@ -81,7 +81,7 @@ export const totalPayment = (data) => {
 };
 
 export const resetDataTransaction = () => {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({
       type: 'RESET_DATA_TRANSACTION',
     });

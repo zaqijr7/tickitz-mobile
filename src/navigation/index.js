@@ -20,7 +20,7 @@ import ResetPassword from '../screens/ResetPassword';
 
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector(state => state.auth.token);
   const options = {
     header: () => <Navbar />,
   };

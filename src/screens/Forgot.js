@@ -52,7 +52,7 @@ function Forgot() {
           <TextInput
             placeholder="Write your email"
             style={styles.formInput}
-            onChangeText={(mail) => setEmail(mail)}
+            onChangeText={mail => setEmail(mail)}
           />
         </View>
         <TouchableOpacity onPress={() => handlePress()}>

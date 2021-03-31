@@ -15,11 +15,11 @@ import ebv from '../assets/icons/ebv.png';
 
 function CardSchedule(props) {
   const navigation = useNavigation();
-  const movieTitle = useSelector((state) => state.transaction.movie.title);
-  const dateShow = useSelector((state) => state.findSchedule.date);
+  const movieTitle = useSelector(state => state.transaction.movie.title);
+  const dateShow = useSelector(state => state.findSchedule.date);
   const [time, setTime] = useState(null);
   const dispatch = useDispatch();
-  const handlePress = (idCinema) => {
+  const handlePress = idCinema => {
     dispatch(cinemaTimeSelected(idCinema, time, movieTitle, dateShow));
     navigation.navigate('Order');
   };

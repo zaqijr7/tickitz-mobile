@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 
 export const login = (email, password) => {
   console.log(email, '<<< ini email');
-  return async (dispatch) => {
+  return async dispatch => {
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
@@ -32,7 +32,7 @@ export const login = (email, password) => {
 };
 
 export const updatePhoto = (token, id) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const profile = await http(token).get(`profile?id=${id}`);
     dispatch({
       type: 'PROFILE',
@@ -41,8 +41,8 @@ export const updatePhoto = (token, id) => {
   };
 };
 
-export const updateProfileUser = (data) => {
-  return (dispatch) => {
+export const updateProfileUser = data => {
+  return dispatch => {
     dispatch({
       type: 'PROFILE',
       payload: data,
@@ -51,7 +51,7 @@ export const updateProfileUser = (data) => {
 };
 
 export const destoryToken = () => {
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({
       type: 'LOGOUT',
       payload: null,
@@ -59,8 +59,8 @@ export const destoryToken = () => {
   };
 };
 
-export const emailReset = (email) => {
-  return async (dispatch) => {
+export const emailReset = email => {
+  return async dispatch => {
     dispatch({
       type: 'EMAIL_RESET',
       payload: email,

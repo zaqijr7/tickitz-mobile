@@ -9,11 +9,11 @@ import moment from 'moment';
 import {resetDataTransaction} from '../redux/action/transaction';
 
 function Ticket() {
-  const movieTitle = useSelector((state) => state.transaction.movie.title);
-  const time = useSelector((state) => state.transaction.showTime.name);
-  const date = useSelector((state) => state.findSchedule.date);
-  const seat = useSelector((state) => state.transaction.listSeat);
-  const totalPayment = useSelector((state) => state.transaction.totalPayment);
+  const movieTitle = useSelector(state => state.transaction.movie.title);
+  const time = useSelector(state => state.transaction.showTime.name);
+  const date = useSelector(state => state.findSchedule.date);
+  const seat = useSelector(state => state.transaction.listSeat);
+  const totalPayment = useSelector(state => state.transaction.totalPayment);
   const dispatch = useDispatch();
   useEffect(() => {
     return () => {

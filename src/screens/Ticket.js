@@ -82,7 +82,7 @@ function Ticket() {
               <TouchableOpacity style={styles.btnTotal}>
                 <Text>Total</Text>
                 <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                  ${totalPayment}
+                  Rp. {totalPayment}
                 </Text>
               </TouchableOpacity>
             </View>

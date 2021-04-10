@@ -8,7 +8,7 @@ import {chooseMovie} from '../redux/action/transaction';
 function ListNowShow(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const movieSelect = (id) => {
+  const movieSelect = id => {
     dispatch(chooseMovie(id));
     navigation.navigate('MovieDetail');
   };

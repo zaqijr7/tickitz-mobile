@@ -1,5 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import moment from 'moment';
 import ButtonDate from '../components/ButtonDate';
 import CardSchedule from '../components/CardSchedule';
@@ -15,11 +23,11 @@ function MovieDetail() {
   const [msgRes, setMsgRes] = useState('');
   const [pageInfo, setPageInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const movieSelected = useSelector((state) => state.transaction.movie);
-  const date = useSelector((state) => state.findSchedule.date);
-  const city = useSelector((state) => state.findSchedule.city);
-  const idMovie = useSelector((state) => state.transaction.movie.id);
-  const moviePrice = useSelector((state) => state.transaction.movie.price);
+  const movieSelected = useSelector(state => state.transaction.movie);
+  const date = useSelector(state => state.findSchedule.date);
+  const city = useSelector(state => state.findSchedule.city);
+  const idMovie = useSelector(state => state.transaction.movie.id);
+  const moviePrice = useSelector(state => state.transaction.movie.price);
   const limit = 1;
 
   const getListSchedule = async () => {
@@ -41,7 +49,7 @@ function MovieDetail() {
     }
   };
 
-  const getDataNextPage = async (page) => {
+  const getDataNextPage = async page => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
@@ -112,22 +120,31 @@ function MovieDetail() {
         </View>
         <ButtonDate />
         <ButtonLocation />
-        {listSchedule !== null ? (
-          listSchedule.map((item, index) => {
-            return (
-              <CardSchedule
-                idCinema={item.id_cinema}
-                cinema={item.name}
-                address={item.address}
-                logo={item.logo}
-                listShowTime={item.listShowTime}
-                price={moviePrice}
-              />
-            );
-          })
+        {isLoading === true ? (
+          <ActivityIndicator size="large" color="black" />
         ) : (
-          <Text style={styles.textCenter}>Please choose date and location</Text>
+          <>
+            {listSchedule !== null ? (
+              listSchedule.map((item, index) => {
+                return (
+                  <CardSchedule
+                    idCinema={item.id_cinema}
+                    cinema={item.name}
+                    address={item.address}
+                    logo={item.logo}
+                    listShowTime={item.listShowTime}
+                    price={moviePrice}
+                  />
+                );
+              })
+            ) : (
+              <Text style={styles.textCenter}>
+                Please choose date and location
+              </Text>
+            )}
+          </>
         )}
+
         <View style={styles.rowPagination}>
           {pageInfo !== null ? (
             [...Array(pageInfo.totalPage)].map((item, index) => {

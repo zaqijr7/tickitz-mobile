@@ -1,19 +1,16 @@
 import React from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
-import Navbar from '../components/Navbar';
 import NowShowingCard from '../components/NowShowingCard';
 import SectionHero from '../components/SectionHero';
 
 //import thumbnail movie
-import movie1 from '../assets/images/movie/1.jpg';
-import movie2 from '../assets/images/movie/2.jpg';
 import movie3 from '../assets/images/movie/3.jpg';
 import movie4 from '../assets/images/movie/4.jpg';
 import movie5 from '../assets/images/movie/5.jpg';
@@ -28,11 +25,19 @@ import {useNavigation} from '@react-navigation/native';
 
 function Home() {
   const [nowShow, setNowShow] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const getNowShow = async () => {
-    const response = await http().get('nowshow');
-    setNowShow(response.data.results);
+    setIsLoading(true);
+    try {
+      const response = await http().get('nowshow');
+      setNowShow(response.data.results);
+      setIsLoading(false);
+    } catch (err) {
+      setNowShow([]);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -55,18 +60,32 @@ function Home() {
             </TouchableOpacity>
           </View>
           <View>
-            <FlatList
-              data={nowShow}
-              keyExtractor={(item, index) => String(item.id)}
-              renderItem={({item}) => (
-                <NowShowingCard
-                  poster={item.poster}
-                  title={item.title}
-                  id={item.id}
-                />
-              )}
-              horizontal={true}
-            />
+            {isLoading === true ? (
+              <ActivityIndicator
+                size="large"
+                color="black"
+                style={styles.isLoading}
+              />
+            ) : (
+              <>
+                {nowShow.length === 0 ? (
+                  <Text>Now Showing Movie Not Found</Text>
+                ) : (
+                  <FlatList
+                    data={nowShow}
+                    keyExtractor={(item, index) => String(item.id)}
+                    renderItem={({item}) => (
+                      <NowShowingCard
+                        poster={item.poster}
+                        title={item.title}
+                        id={item.id}
+                      />
+                    )}
+                    horizontal={true}
+                  />
+                )}
+              </>
+            )}
           </View>
         </View>
         <View>
@@ -146,6 +165,9 @@ function Home() {
 }
 
 const styles = StyleSheet.create({
+  isLoading: {
+    marginBottom: 15,
+  },
   viewsParentRootFalse: {
     backgroundColor: 'white',
   },

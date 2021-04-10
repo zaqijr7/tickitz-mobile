@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -6,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 import {REACT_APP_API_URL as API_URL} from '@env';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,9 +23,10 @@ function ViewAll() {
   const [inputSearch, setInputSearch] = useState('');
   const [page, setPage] = useState(1);
   const [msgResponse, setMsgResponse] = useState('');
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState([]);
   const [pageInfo, setPageInfo] = useState(null);
   const [listRefresh, setListRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const limit = 4;
 
   const handleSort = () => {
@@ -36,14 +39,23 @@ function ViewAll() {
   };
 
   const getMovieByCondition = async () => {
+    setIsLoading(true);
     try {
       const response = await http().get(
         `${API_URL}nowshow?search=${inputSearch}&page=${page}&limit=${limit}&sort=${sortBy}&order=${sort}`,
       );
-      setResult(response.data.results);
-      setPageInfo(response.data.pageInfo);
+      const resultsMovie = response.data.results;
+      if (resultsMovie.length !== 0) {
+        setResult(response.data.results);
+        setPageInfo(response.data.pageInfo);
+        setIsLoading(false);
+      } else {
+        setMsgResponse('Movie Not Found');
+        setIsLoading(false);
+      }
     } catch (err) {
-      setMsgResponse(err.response.data.message);
+      setMsgResponse('Now Showing Movie Not Found');
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +65,6 @@ function ViewAll() {
       const oldData = result;
       const response = await http().get(`${pageInfo.nextLink}`);
       const resultResponse = response.data.results;
-      console.log(resultResponse, '<< ini datanya');
       setPageInfo(response.data.pageInfo);
       const newData = [...oldData, ...resultResponse];
       setResult(newData);
@@ -68,7 +79,6 @@ function ViewAll() {
     try {
       const response = await http().get(`${pageInfo.nextLink}`);
       const resultResponse = response.data.results;
-      console.log(resultResponse, '<< ini datanya');
       setPageInfo(response.data.pageInfo);
       const newData = [...oldData, ...resultResponse];
       setResult(newData);
@@ -88,7 +98,7 @@ function ViewAll() {
           <TextInput
             style={styles.formInput}
             placeholder="Search Title..."
-            onChangeText={(value) => setInputSearch(value)}
+            onChangeText={value => setInputSearch(value)}
           />
         </View>
         <View style={styles.parentFrame}>
@@ -119,24 +129,34 @@ function ViewAll() {
         </View>
       </View>
       <View style={styles.parentWrapperList}>
-        <FlatList
-          data={result}
-          keyExtractor={(item, index) => String(item.id)}
-          renderItem={({item}) => (
-            <ListNowShow
-              title={item.title}
-              poster={item.poster}
-              price={item.price}
-              genre={item.genre}
-              id={item.id}
-            />
-          )}
-          refreshing={listRefresh}
-          onRefresh={fetchNewData}
-          onEndReached={nextData}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={<LoadMore load={listRefresh} />}
-        />
+        {isLoading === true ? (
+          <ActivityIndicator size="large" color="black" />
+        ) : (
+          <>
+            {result.length === 0 ? (
+              <Text style={styles.textMovieNotFound}>{msgResponse}</Text>
+            ) : (
+              <FlatList
+                data={result}
+                keyExtractor={(item, index) => String(item.id)}
+                renderItem={({item}) => (
+                  <ListNowShow
+                    title={item.title}
+                    poster={item.poster}
+                    price={item.price}
+                    genre={item.genre}
+                    id={item.id}
+                  />
+                )}
+                refreshing={listRefresh}
+                onRefresh={fetchNewData}
+                onEndReached={nextData}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={<LoadMore load={listRefresh} />}
+              />
+            )}
+          </>
+        )}
       </View>
     </>
   );
@@ -151,6 +171,10 @@ const styles = StyleSheet.create({
     paddingStart: 40,
     paddingVertical: 5,
     width: '100%',
+  },
+  textMovieNotFound: {
+    textAlign: 'center',
+    color: 'gray',
   },
   wrapperInput: {
     width: '100%',
@@ -172,6 +196,7 @@ const styles = StyleSheet.create({
   parentWrapperList: {
     paddingHorizontal: 20,
     flex: 1,
+    justifyContent: 'center',
   },
   btnSortBy: {
     width: 170,

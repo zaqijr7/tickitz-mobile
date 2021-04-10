@@ -18,11 +18,11 @@ import {useState} from 'react/cjs/react.development';
 
 function Payment() {
   const navigation = useNavigation();
-  const totalPayment = useSelector((state) => state.transaction.totalPayment);
-  const profile = useSelector((state) => state.auth.profile);
-  const token = useSelector((state) => state.auth.token);
-  const transaction = useSelector((state) => state.transaction);
-  const date = useSelector((state) => state.findSchedule.date);
+  const totalPayment = useSelector(state => state.transaction.totalPayment);
+  const profile = useSelector(state => state.auth.profile);
+  const token = useSelector(state => state.auth.token);
+  const transaction = useSelector(state => state.transaction);
+  const date = useSelector(state => state.findSchedule.date);
   const seat = transaction.listSeat.join();
   const [statueRes, setStatusRes] = useState('');
 
@@ -47,7 +47,7 @@ function Payment() {
     <ScrollView>
       <View style={style.rowTotalPayment}>
         <Text style={style.textTotalPayment}>Total Payment</Text>
-        <Text style={style.textTotalCount}>${`${totalPayment}`}</Text>
+        <Text style={style.textTotalCount}>Rp. {`${totalPayment}`}</Text>
       </View>
       <Text style={style.textPaymnetMethod}>Payment Method</Text>
       <View style={style.parentWrapperCardPayment}>

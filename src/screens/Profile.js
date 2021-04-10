@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import photo from '../assets/images/avatar.jpg';
@@ -24,9 +25,10 @@ import {REACT_APP_API_URL as API_URL} from '@env';
 
 function Profile() {
   const navigation = useNavigation();
-  const profile = useSelector((state) => state.auth.profile);
-  const token = useSelector((state) => state.auth.token);
+  const profile = useSelector(state => state.auth.profile);
+  const token = useSelector(state => state.auth.token);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdateProfile, setShowModalUpdateProfile] = useState(false);
@@ -44,7 +46,7 @@ function Profile() {
 
   const openGallery = () => {
     const options = {mediaType: 'photo'};
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       if (response.fileSize > 2000000) {
         setMsgRes('the file is too large');
         setTimeout(() => {
@@ -58,7 +60,7 @@ function Profile() {
 
   const openCamera = () => {
     const options = {mediaType: 'photo'};
-    launchCamera(options, (response) => {
+    launchCamera(options, response => {
       if (response.fileSize > 2000000) {
         setMsgRes('the file is too large');
         setTimeout(() => {
@@ -71,6 +73,7 @@ function Profile() {
   };
 
   const uploadPhoto = async () => {
+    setIsLoading(true);
     const fileUpload = {
       uri: image.uri,
       type: 'image/jpeg',
@@ -82,6 +85,7 @@ function Profile() {
     dispatch(updatePhoto(token, profile.id));
     setImage(null);
     setMsgRes(response.data.message);
+    setIsLoading(false);
     setTimeout(() => {
       setMsgRes(null);
     }, 8000);
@@ -183,29 +187,40 @@ function Profile() {
               <Icon name="ellipsis-h" style={{fontSize: 19}} />
             </View>
             <View style={styles.rowPicture}>
-              {(profile.photo === `${API_URL}UNDEFINED` && image === null) ||
-              (profile.photo === `${API_URL}undefined` && image === null) ? (
-                <TouchableOpacity
-                  style={styles.parentWrapperPicture}
-                  onPress={() => choosePhotto()}>
-                  <View style={styles.layerChoosePhoto} />
-                  <Icon name="camera" style={styles.iconCamera} />
-                  <Image source={photo} style={styles.profilPicture} />
-                </TouchableOpacity>
+              {isLoading === true ? (
+                <ActivityIndicator size="large" color="black" />
               ) : (
-                <TouchableOpacity
-                  style={styles.parentWrapperPicture}
-                  onPress={() => choosePhotto()}>
-                  <View style={styles.layerChoosePhoto} />
-                  <Icon name="camera" style={styles.iconCamera} />
-                  <Image
-                    source={
-                      image !== null ? {uri: image.uri} : {uri: profile.photo}
-                    }
-                    style={styles.profilPicture}
-                  />
-                </TouchableOpacity>
+                <>
+                  {(profile.photo === `${API_URL}UNDEFINED` &&
+                    image === null) ||
+                  (profile.photo === `${API_URL}undefined` &&
+                    image === null) ? (
+                    <TouchableOpacity
+                      style={styles.parentWrapperPicture}
+                      onPress={() => choosePhotto()}>
+                      <View style={styles.layerChoosePhoto} />
+                      <Icon name="camera" style={styles.iconCamera} />
+                      <Image source={photo} style={styles.profilPicture} />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.parentWrapperPicture}
+                      onPress={() => choosePhotto()}>
+                      <View style={styles.layerChoosePhoto} />
+                      <Icon name="camera" style={styles.iconCamera} />
+                      <Image
+                        source={
+                          image !== null
+                            ? {uri: image.uri}
+                            : {uri: profile.photo}
+                        }
+                        style={styles.profilPicture}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </>
               )}
+
               {image && (
                 <TouchableOpacity
                   onPress={() => uploadPhoto()}
@@ -269,7 +284,7 @@ function Profile() {
                 <TextInput
                   defaultValue={profile.firstName}
                   style={styles.formInput}
-                  onChangeText={(value) => setFirstName(value)}
+                  onChangeText={value => setFirstName(value)}
                 />
               </View>
               <View>
@@ -277,7 +292,7 @@ function Profile() {
                 <TextInput
                   defaultValue={profile.lastName}
                   style={styles.formInput}
-                  onChangeText={(value) => setLastName(value)}
+                  onChangeText={value => setLastName(value)}
                 />
               </View>
               <View>
@@ -285,7 +300,7 @@ function Profile() {
                 <TextInput
                   defaultValue={profile.email}
                   style={styles.formInput}
-                  onChangeText={(value) => setEmail(value)}
+                  onChangeText={value => setEmail(value)}
                 />
               </View>
               <View style={styles.wrapperInput}>
@@ -296,7 +311,7 @@ function Profile() {
                     defaultValue={profile.phoneNumber}
                     style={styles.formInputPhoneNumber}
                     keyboardType="phone-pad"
-                    onChangeText={(value) => setPhoneNumber(value)}
+                    onChangeText={value => setPhoneNumber(value)}
                   />
                 </View>
               </View>
@@ -318,7 +333,7 @@ function Profile() {
                   <TextInput
                     placeholder="Write your password"
                     style={styles.formInput}
-                    onChangeText={(value) => setNewPassword(value)}
+                    onChangeText={value => setNewPassword(value)}
                   />
                   <Icon name="eye" style={styles.eyeIcon} />
                 </View>
@@ -329,7 +344,7 @@ function Profile() {
                   <TextInput
                     placeholder="Write your password"
                     style={styles.formInput}
-                    onChangeText={(value) => setConfirmPassword(value)}
+                    onChangeText={value => setConfirmPassword(value)}
                   />
                   <Icon name="eye" style={styles.eyeIcon} />
                 </View>

@@ -47,7 +47,9 @@ function CardSchedule(props) {
           </View>
           <View style={styles.rowPrice}>
             <Text style={styles.textPrice}>Price</Text>
-            <Text style={styles.textPriceSeat}>${`${props.price}`}/seat</Text>
+            <Text style={styles.textPriceSeat}>
+              Rp. {`${props.price}`}/seat
+            </Text>
           </View>
           <View style={styles.rowBtn}>
             {time === null ? (

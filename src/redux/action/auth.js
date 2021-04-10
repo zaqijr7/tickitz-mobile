@@ -21,12 +21,27 @@ export const login = (email, password) => {
         type: 'PROFILE',
         payload: profile.data.results,
       });
+      dispatch({
+        type: 'LOGIN_MESSAGE',
+        msg: 'Login Successfully',
+      });
+      setTimeout(() => {
+        dispatch({
+          type: 'LOGIN_MESSAGE',
+          msg: '',
+        });
+      }, 2000);
     } catch (err) {
-      console.log(err.response.data.message);
       dispatch({
         type: 'LOGIN_MESSAGE',
         msg: err.response.data.message,
       });
+      setTimeout(() => {
+        dispatch({
+          type: 'LOGIN_MESSAGE',
+          msg: '',
+        });
+      }, 3000);
     }
   };
 };

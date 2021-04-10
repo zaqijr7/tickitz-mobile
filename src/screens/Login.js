@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   Text,
@@ -32,11 +32,17 @@ function Login() {
       dispatch(login(email, password));
       setIsLoading(false);
     }, 1000);
-    PushNotification.localNotification({
-      title: 'Your Activity',
-      message: msg,
-    });
   };
+  useEffect(() => {
+    if (msg !== '') {
+      PushNotification.localNotification({
+        channelId: 'general',
+        title: 'Your Activity',
+        message: msg,
+      });
+    }
+  }, [msg]);
+
   console.log(msg, '< ini pesannya');
   return (
     <>

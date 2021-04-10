@@ -27,16 +27,15 @@ function Login() {
   const msg = useSelector(state => state.auth.message);
   const navigation = useNavigation();
   const handlePress = () => {
-    PushNotification.localNotification({
-      channelId: 'general',
-      title: 'Your Activity',
-      message: 'you just logged in',
-    });
     setIsLoading(!isLoading);
     setTimeout(() => {
       dispatch(login(email, password));
       setIsLoading(false);
     }, 1000);
+    PushNotification.localNotification({
+      title: 'Your Activity',
+      message: msg,
+    });
   };
   console.log(msg, '< ini pesannya');
   return (

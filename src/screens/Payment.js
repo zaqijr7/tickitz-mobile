@@ -42,7 +42,6 @@ function Payment() {
       setStatusRes(500);
     }
   };
-  console.log(statueRes);
   return (
     <ScrollView>
       <View style={style.rowTotalPayment}>

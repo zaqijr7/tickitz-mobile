@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -9,7 +9,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Seats from '../components/Seats';
 import {Picker} from '@react-native-picker/picker';
-import {useState} from 'react/cjs/react.development';
 import Footer from '../components/Footer';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -19,7 +18,7 @@ function Order() {
   const [numberSeat, setNumberSeat] = useState('');
   const [rowSelectSeat, setRowSelectSeat] = useState(1);
   const navigation = useNavigation();
-  const listSeat = useSelector((state) => state.transaction.listSeat);
+  const listSeat = useSelector(state => state.transaction.listSeat);
   const handlePress = () => {};
   return (
     <>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -16,7 +17,7 @@ import http from '../helper/http';
 function OrderHistory() {
   const navigation = useNavigation();
   const [ticket, setTicket] = useState([]);
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector(state => state.auth.token);
   const getDataTicketHistory = async () => {
     try {
       const dataTicket = await http(token).get('ticket/list');

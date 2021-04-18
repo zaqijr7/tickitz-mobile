@@ -21,9 +21,6 @@ import ResetPassword from '../screens/ResetPassword';
 function NavigationScreenRoot() {
   const Stack = createStackNavigator();
   const token = useSelector(state => state.auth.token);
-  const options = {
-    header: () => <Navbar />,
-  };
 
   return (
     <>
@@ -65,38 +62,74 @@ function NavigationScreenRoot() {
           </>
         ) : (
           <>
-            <Stack.Screen component={Home} name="Home" options={options} />
+            <Stack.Screen
+              component={Home}
+              name="Home"
+              options={{
+                header: () => <Navbar />,
+              }}
+            />
 
-            <Stack.Screen component={Admin} name="Admin" options={options} />
+            <Stack.Screen
+              component={Admin}
+              name="Admin"
+              options={{
+                header: () => <Navbar />,
+              }}
+            />
 
             <Stack.Screen
               component={MovieDetail}
               name="MovieDetail"
-              options={options}
+              options={{
+                header: () => <Navbar />,
+              }}
             />
 
-            <Stack.Screen component={Order} name="Order" options={options} />
+            <Stack.Screen
+              component={Order}
+              name="Order"
+              options={{
+                header: () => <Navbar />,
+              }}
+            />
+
             <Stack.Screen
               component={Payment}
               name="Payment"
-              options={options}
+              options={{
+                header: () => <Navbar />,
+              }}
             />
-            <Stack.Screen component={Ticket} name="Ticket" options={options} />
+            <Stack.Screen
+              component={Ticket}
+              name="Ticket"
+              options={{
+                header: () => <Navbar />,
+              }}
+            />
+
             <Stack.Screen
               component={Profile}
               name="Profile"
-              options={options}
+              options={{
+                header: () => <Navbar />,
+              }}
             />
             <Stack.Screen
               component={OrderHistory}
               name="OrderHistory"
-              options={options}
+              options={{
+                header: () => <Navbar />,
+              }}
             />
 
             <Stack.Screen
               component={ViewAll}
               name="ViewAll"
-              options={options}
+              options={{
+                header: () => <Navbar />,
+              }}
             />
           </>
         )}

@@ -15,7 +15,7 @@ import ButtonSocialMedia from '../components/ButtonSocialMadiea';
 import {useDispatch, useSelector} from 'react-redux';
 
 //import action
-import {login} from '../redux/action/auth';
+import {login, cleanMsg} from '../redux/action/auth';
 import {useNavigation} from '@react-navigation/native';
 import PushNotification from 'react-native-push-notification';
 
@@ -27,6 +27,7 @@ function Login() {
   const msg = useSelector(state => state.auth.message);
   const navigation = useNavigation();
   const handlePress = () => {
+    dispatch(cleanMsg());
     setIsLoading(!isLoading);
     setTimeout(() => {
       dispatch(login(email, password));
@@ -42,8 +43,6 @@ function Login() {
       });
     }
   }, [msg]);
-
-  console.log(msg, '< ini pesannya');
   return (
     <>
       <ScrollView style={styles.parentRoot}>

@@ -1,7 +1,7 @@
 const initialState = {
   token: null,
   message: '',
-  profile: [],
+  profile: null,
   emailReset: '',
 };
 
@@ -10,7 +10,9 @@ const authReducer = (state = initialState, action) => {
     case 'LOGIN':
       return {
         ...state,
-        token: action.payload,
+        token: action.token,
+        profile: action.profile,
+        message: action.msg,
       };
     case 'PROFILE':
       return {

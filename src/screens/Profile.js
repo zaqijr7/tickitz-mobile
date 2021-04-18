@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -16,7 +16,6 @@ import star from '../assets/icons/star.png';
 import Footer from '../components/Footer';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {useState} from 'react/cjs/react.development';
 import {useDispatch, useSelector} from 'react-redux';
 import {updatePhoto, updateProfileUser} from '../redux/action/auth';
 import http from '../helper/http';

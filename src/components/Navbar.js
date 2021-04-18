@@ -18,7 +18,7 @@ function Navbar({children}) {
   const [bodyHeader, setBodyHeader] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const photoProfile = useSelector((state) => state.auth.profile.photo);
+  const photoProfile = useSelector(state => state.auth.profile);
   const logOut = () => {
     dispatch(destoryToken());
   };
@@ -30,11 +30,20 @@ function Navbar({children}) {
             <Image source={Logo} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setBodyHeader(!bodyHeader)}>
-            {photoProfile !== `${API_URL}UNDEFINED` &&
-            photoProfile !== `${API_URL}undefined` ? (
-              <Image source={{uri: photoProfile}} style={styles.photoProfile} />
+            {photoProfile === null ? (
+              <View />
             ) : (
-              <Icon name="bars" style={styles.iconBar} />
+              <>
+                {photoProfile.photo !== `${API_URL}UNDEFINED` &&
+                photoProfile.photo !== `${API_URL}undefined` ? (
+                  <Image
+                    source={{uri: photoProfile.photo}}
+                    style={styles.photoProfile}
+                  />
+                ) : (
+                  <Icon name="bars" style={styles.iconBar} />
+                )}
+              </>
             )}
           </TouchableOpacity>
         </View>

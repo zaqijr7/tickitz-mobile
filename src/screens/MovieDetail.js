@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -15,7 +15,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Footer from '../components/Footer';
 import ButtonLocation from '../components/ButtonLocation';
 import {useSelector} from 'react-redux';
-import {useEffect} from 'react/cjs/react.development';
 import http from '../helper/http';
 
 function MovieDetail() {

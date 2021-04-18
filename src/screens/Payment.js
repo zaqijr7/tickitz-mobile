@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 //import icon payment
@@ -14,7 +14,6 @@ import Footer from '../components/Footer';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import http from '../helper/http';
-import {useState} from 'react/cjs/react.development';
 
 function Payment() {
   const navigation = useNavigation();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -19,7 +19,6 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import ButtonMonth from '../components/ButtonMonth';
 import UpcomingCard from '../components/UpcomingCard';
 import Footer from '../components/Footer';
-import {useEffect, useState} from 'react/cjs/react.development';
 import http from '../helper/http';
 import {useNavigation} from '@react-navigation/native';
 
@@ -27,6 +26,29 @@ function Home() {
   const [nowShow, setNowShow] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
+
+  const upcomingMovie = [
+    {
+      thumbnail: movie6,
+      title: 'Tenet',
+      genre: 'Action, SCI-FI, Mystery',
+    },
+    {
+      thumbnail: movie5,
+      title: 'The Lite Things',
+      genre: 'Action, SCI-FI, Mystery',
+    },
+    {
+      thumbnail: movie4,
+      title: 'Whitches',
+      genre: 'Action, SCI-FI, Comedy',
+    },
+    {
+      thumbnail: movie3,
+      title: 'Combat Wombat',
+      genre: 'Action, SCI-FI, Fun',
+    },
+  ];
 
   const getNowShow = async () => {
     setIsLoading(true);
@@ -43,7 +65,6 @@ function Home() {
   useEffect(() => {
     getNowShow();
   }, []);
-  console.log(nowShow);
   return (
     <>
       <ScrollView style={styles.viewsParentRootFalse}>
@@ -112,28 +133,32 @@ function Home() {
             <ButtonMonth month="August" />
           </ScrollView>
           <View>
-            <ScrollView horizontal={true}>
-              <UpcomingCard
-                thumbnail={movie6}
-                title="Tenet"
-                genre="Action, SCI-FI, Mystery"
+            {isLoading === true ? (
+              <ActivityIndicator
+                size="large"
+                color="black"
+                style={styles.isLoading}
               />
-              <UpcomingCard
-                thumbnail={movie5}
-                title="The Lite Things"
-                genre="Action, SCI-FI, Mystery"
-              />
-              <UpcomingCard
-                thumbnail={movie4}
-                title="Whitches"
-                genre="Action, SCI-FI, Mystery"
-              />
-              <UpcomingCard
-                thumbnail={movie3}
-                title="Combat Wombat"
-                genre="Action, SCI-FI, Mystery"
-              />
-            </ScrollView>
+            ) : (
+              <>
+                {nowShow.length === 0 ? (
+                  <Text>Now Showing Movie Not Found</Text>
+                ) : (
+                  <FlatList
+                    data={upcomingMovie}
+                    keyExtractor={(item, index) => String(index)}
+                    renderItem={({item}) => (
+                      <UpcomingCard
+                        thumbnail={item.thumbnail}
+                        title={item.title}
+                        genre={item.genre}
+                      />
+                    )}
+                    horizontal={true}
+                  />
+                )}
+              </>
+            )}
           </View>
         </View>
         <View style={styles.movieGoersSection}>
